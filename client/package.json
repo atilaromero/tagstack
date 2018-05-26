@@ -1,0 +1,28 @@
+{
+  "name": "tagstack-client",
+  "version": "1.0.0",
+  "description": "Data visualization tool focused on collaborative tagging. Client side.",
+  "author": "atilaromero@gmail.com",
+  "license": "AGPL",
+  "repository": "github:atilaromero/tagstack",
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "dependencies": {
+    "bootstrap": "^4.1.1",
+    "c3": "^0.4.23",
+    "d3": "^5.4.0",
+    "google-auth-library": "^1.5.0",
+    "prop-types": "^15.6.1",
+    "react": "^16.4.0",
+    "react-c3js": "^0.1.20",
+    "react-dom": "^16.4.0",
+    "react-router-dom": "^4.2.2",
+    "react-scripts": "1.1.4",
+    "reactstrap": "^6.0.1"
+  },
+  "proxy": "http://localhost:3000/"
+}

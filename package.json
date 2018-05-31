@@ -7,7 +7,7 @@
   "repository": "github:atilaromero/tagstack",
   "scripts": {
     "test": "jest",
-    "heroku-postbuild": "cd client && npm && npm run build",
+    "heroku-postbuild": "cd client && npm i && npm run build",
     "start": "node src/server.js"
   },
   "dependencies": {

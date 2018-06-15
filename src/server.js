@@ -36,7 +36,7 @@ async function doSearch(query) {
 app.use('/search',
   // auth_middleware,
   (req, res) => {
-    doSearch(req.query.query)
+    doSearch(req.query.q)
       .then(data => {
         res.json({data})
       })

@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 const path = require('path')
 const assert = require('assert')
+const fetch = require('node-fetch')
 
 const REACT_APP_CLIENT_ID = process.env.REACT_APP_CLIENT_ID
 
@@ -26,6 +27,25 @@ app.use('/tags',
   }
 )
 
+async function doSearch(query) {
+  const url = "http://0.0.0.0:8080/search/item02-M170206?q=" + encodeURIComponent(query)
+  const res2 = await fetch(url)
+  const data = res2.text()
+  return data
+}
+app.use('/search',
+  // auth_middleware,
+  (req, res) => {
+    doSearch(req.query.query)
+      .then(data => {
+        res.json({data})
+      })
+      .catch(error => {
+        res.status(500).json({error})
+      })
+  }
+)
+
 app.use('/data',
   auth_middleware,
   (req, res) => {
@@ -37,6 +57,8 @@ app.use('/data',
     })
   }
 )
+
+// TODO: redirect http to https
 
 app.use('/', (req, res) => {
   res.sendFile(path.join(__dirname+'/../client/build/index.html'));

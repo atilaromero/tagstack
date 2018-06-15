@@ -2,6 +2,7 @@ import React, { Component } from  'react';
 import NavTop from './components/auth/NavTop'
 import GoogleUser from './components/auth/GoogleUser'
 import Data from './components/Data'
+import Search from './components/Search'
 import assert from 'assert'
 
 import C3Chart from 'react-c3js';
@@ -43,11 +44,17 @@ class App extends Component {
         <div className="container">
           <div className="row">
             <div className="col-md-12">
-              <Data user={this.state.user} onData={this.updateData}/>
-              {(this.state.data) ?
+              {/* <Data user={this.state.user} onData={this.updateData}/> */}
+              <Search
+                user={this.state.user}
+                onData={this.updateData}
+                query="test"
+              />
+              data:{JSON.stringify(this.state.data)}
+              {/* {(this.state.data) ?
                 (<C3Chart data={this.state.data}/>)
                 : (null)
-              }
+              } */}
             </div>
           </div>
         </div>

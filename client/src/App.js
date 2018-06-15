@@ -16,10 +16,14 @@ class App extends Component {
     this.state = {
       user: {},
       signedIn: false,
+      query: "",
+      tempquery: "",
     }
     this.userChanged = this.userChanged.bind(this)
     this.signedChanged = this.signedChanged.bind(this)
     this.updateData = this.updateData.bind(this)
+    this.handleChange = this.handleChange.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
   }
 
   userChanged(user) {
@@ -30,6 +34,17 @@ class App extends Component {
   }
   updateData(data){
     this.setState({data})
+  }
+  handleChange(prop){
+    return e => {
+      const r = {}
+      r[prop] = e.target.value
+      this.setState(r)
+    }
+  }
+  handleSubmit(e){
+    this.setState({ query:this.state.tempquery })
+    e.preventDefault()
   }
 
   render() {
@@ -45,12 +60,22 @@ class App extends Component {
           <div className="row">
             <div className="col-md-12">
               {/* <Data user={this.state.user} onData={this.updateData}/> */}
+              <form onSubmit={this.handleSubmit}>
+                <label>
+                  Search:
+                  <input type="text"
+                    value={this.state.tempquery}
+                    onChange={this.handleChange('tempquery')}
+                  />
+                  <input type="submit" value="Search"/>
+                </label>
+              </form>
               <Search
                 user={this.state.user}
                 onData={this.updateData}
-                query="test"
+                query={this.state.query}
               />
-              data:{JSON.stringify(this.state.data)}
+              state:{JSON.stringify(this.state)}
               {/* {(this.state.data) ?
                 (<C3Chart data={this.state.data}/>)
                 : (null)

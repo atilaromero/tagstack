@@ -1,11 +1,15 @@
 import React, { Component } from  'react';
-import NavTop from './components/auth/NavTop'
-import GoogleUser from './components/auth/GoogleUser'
-import Data from './components/Data'
-import Search from './components/Search'
 import assert from 'assert'
 
-import C3Chart from 'react-c3js';
+import NavTop from './components/auth/NavTop'
+import GoogleUser from './components/auth/GoogleUser'
+// import Data from './components/Data'
+import { SearchContainer } from './components/Search'
+import { SourcesContainer } from './components/Sources'
+
+import './App.css'
+
+// import C3Chart from 'react-c3js';
 
 const REACT_APP_CLIENT_ID = process.env.REACT_APP_CLIENT_ID
 assert(REACT_APP_CLIENT_ID, 'REACT_APP_CLIENT_ID not set')
@@ -16,14 +20,10 @@ class App extends Component {
     this.state = {
       user: {},
       signedIn: false,
-      query: "",
-      tempquery: "",
     }
     this.userChanged = this.userChanged.bind(this)
     this.signedChanged = this.signedChanged.bind(this)
     this.updateData = this.updateData.bind(this)
-    this.handleChange = this.handleChange.bind(this)
-    this.handleSubmit = this.handleSubmit.bind(this)
   }
 
   userChanged(user) {
@@ -34,17 +34,6 @@ class App extends Component {
   }
   updateData(data){
     this.setState({data})
-  }
-  handleChange(prop){
-    return e => {
-      const r = {}
-      r[prop] = e.target.value
-      this.setState(r)
-    }
-  }
-  handleSubmit(e){
-    this.setState({ query:this.state.tempquery })
-    e.preventDefault()
   }
 
   render() {
@@ -59,23 +48,9 @@ class App extends Component {
         <div className="container">
           <div className="row">
             <div className="col-md-12">
+              <SourcesContainer/>
+              <SearchContainer/>
               {/* <Data user={this.state.user} onData={this.updateData}/> */}
-              <form onSubmit={this.handleSubmit}>
-                <label>
-                  Search:
-                  <input type="text"
-                    value={this.state.tempquery}
-                    onChange={this.handleChange('tempquery')}
-                  />
-                  <input type="submit" value="Search"/>
-                </label>
-              </form>
-              <Search
-                user={this.state.user}
-                onData={this.updateData}
-                query={this.state.query}
-              />
-              state:{JSON.stringify(this.state)}
               {/* {(this.state.data) ?
                 (<C3Chart data={this.state.data}/>)
                 : (null)

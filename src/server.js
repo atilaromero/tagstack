@@ -27,6 +27,26 @@ app.use('/tags',
   }
 )
 
+async function doSources() {
+  const url = "http://0.0.0.0:8080/sources"
+  const res2 = await fetch(url)
+  const data = res2.text()
+  return data
+}
+app.use('/sources',
+  // auth_middleware,
+  (req, res) => {
+    doSources()
+      .then(data => {
+        res.json({data})
+      })
+      .catch(error => {
+        res.status(500).json({error})
+      })
+  }
+)
+
+
 async function doSearch(query) {
   const url = "http://0.0.0.0:8080/search/item02-M170206?q=" + encodeURIComponent(query)
   const res2 = await fetch(url)
@@ -38,7 +58,9 @@ app.use('/search',
   (req, res) => {
     doSearch(req.query.q)
       .then(data => {
-        res.json({data})
+        setTimeout(function () {
+          res.json({data})
+        }, 1000);
       })
       .catch(error => {
         res.status(500).json({error})

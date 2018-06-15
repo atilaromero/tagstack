@@ -1,45 +1,80 @@
-import { Component } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux';
+import {
+  actions
+} from '../ducks/search';
 
-class Search extends Component {
-
-  componentDidUpdate(prevProps) {
-    if (!this.props.user) return;
-    if (this.props.user !== prevProps.user ||
-        this.props.query !== prevProps.query) {
-      this.getData(this.props.query);
-    }
-  }
-
-  async getData(query) {
-    try {
-      const url = "/search?q=" + encodeURIComponent(query)
-      const res = await fetch(url, {
-        headers: {
-          Authorization: 'Bearer ' + this.props.user.id_token,
-        }
-      })
-      if (!res.ok) {
-        const error = await res.text()
-        throw error
-      }
-      const data = await res.json()
-      this.setState({ data })
-      this.props.onData(data)
-    } catch(error) {
-      this.setState({ data: null })
-      this.props.onData(null)
-      this.setState({ error })
-    }
-  }
-
+export class Search extends Component {
   render() {
-    return null
+    return (
+      <form onSubmit={ e => {
+        e.preventDefault()
+        this.props.update()
+      }}>
+        <input required type="text"
+          value={this.props.query}
+          onChange={ e => this.props.setQuery(e.target.value)}
+          disabled={this.props.isLoading}
+        />
+        <input type="submit" value="Search"
+          disabled={this.props.isLoading}
+        />
+        <hr/>
+        <List
+          listItems={this.props.data}
+          disabled={this.props.isLoading}
+        />
+      </form>
+    )
   }
 }
 Search.propTypes = {
+  update: PropTypes.func.isRequired,
+  setQuery: PropTypes.func.isRequired,
   query: PropTypes.string.isRequired,
-  user: PropTypes.object.isRequired,
-  onData: PropTypes.func.isRequired,
+  data: PropTypes.array.isRequired,
+  isLoading: PropTypes.bool.isRequired,
+  error: PropTypes.string,
 }
-export default Search
+
+const List = (props) => {
+  return (
+    <ul>
+      {props.listItems.map((el, i)=>(
+        <li key={i} className="form-inline">
+          {/* <div className="form-group"> */}
+            <input type="checkbox" disabled={props.disabled}/>
+            <span disabled={props.disabled}> {el} </span>
+          {/* </div> */}
+        </li>
+      ))}
+    </ul>
+  )
+};
+List.propTypes = {
+  listItems: PropTypes.array.isRequired,
+  disabled: PropTypes.bool.isRequired,
+}
+
+
+function mapStateToProps(state) {
+  return {
+    query: state.search.query,
+    data:   state.search.data,
+    isLoading:   state.search.isLoading,
+    error:   state.search.error,
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    update: () => dispatch(actions.update()),
+    setQuery: (q) => dispatch(actions.setQuery(q)),
+  };
+}
+
+export const SearchContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Search);

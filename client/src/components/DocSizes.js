@@ -1,11 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux';
-import {
-  actions
-} from '../ducks/docs';
 
-export const DocSizes = (props) => {
+const DocLister = (props) => {
   return (
     <ul>
       {props.data.map((el, i)=>(
@@ -16,24 +12,8 @@ export const DocSizes = (props) => {
     </ul>
   )
 };
-DocSizes.propTypes = {
+DocLister.propTypes = {
   data: PropTypes.array.isRequired,
 }
 
-
-function mapStateToProps(state) {
-  return {
-    data:   state.docs.data,
-  }
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    update: () => dispatch(actions.update()),
-  };
-}
-
-export const DocSizesContainer = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(DocSizes);
+export default DocLister

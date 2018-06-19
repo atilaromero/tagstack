@@ -13,8 +13,12 @@ import classnames from 'classnames';
 
 // import C3Chart from 'react-c3js';
 // import Data from './Data'
-import { DocsContainer } from './DocList'
-import { DocSizesContainer } from './DocSizes'
+import DocContainer  from './DocContainer'
+import DocSizes from './DocSizes'
+import DocList from './DocList'
+
+const DocSizesContainer= DocContainer(DocSizes)
+const DocListContainer= DocContainer(DocList)
 
 export class Tabs extends React.Component {
   constructor(props) {
@@ -63,7 +67,7 @@ export class Tabs extends React.Component {
                   (<C3Chart data={this.state.data}/>)
                   : (null)
                 } */}
-                <DocsContainer/>
+                <DocListContainer/>
               </Col>
             </Row>
           </TabPane>

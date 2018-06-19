@@ -3,21 +3,16 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux';
 import {
   actions
-} from '../ducks/search';
+} from '../ducks/docs';
 
-export class Search extends Component {
+export class Docs extends Component {
   render() {
     return (
       <form onSubmit={ e => {
         e.preventDefault()
         this.props.update()
       }}>
-        <input required type="text"
-          value={this.props.query}
-          onChange={ e => this.props.setQuery(e.target.value)}
-          disabled={this.props.isLoading}
-        />
-        <input type="submit" value="Search"
+        <input type="submit" value="List"
           disabled={this.props.isLoading}
         />
         <hr/>
@@ -29,10 +24,8 @@ export class Search extends Component {
     )
   }
 }
-Search.propTypes = {
+Docs.propTypes = {
   update: PropTypes.func.isRequired,
-  setQuery: PropTypes.func.isRequired,
-  query: PropTypes.string.isRequired,
   data: PropTypes.array.isRequired,
   isLoading: PropTypes.bool.isRequired,
   error: PropTypes.string,
@@ -44,7 +37,7 @@ const List = (props) => {
       {props.listItems.map((el, i)=>(
         <li key={i} className="form-inline">
           <input type="checkbox" disabled={props.disabled}/>
-          <span disabled={props.disabled}> {el} </span>
+          <span disabled={props.disabled}> {JSON.stringify(el)} </span>
         </li>
       ))}
     </ul>
@@ -58,21 +51,19 @@ List.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    query: state.search.query,
-    data:   state.search.data,
-    isLoading:   state.search.isLoading,
-    error:   state.search.error,
+    data:   state.docs.data,
+    isLoading:   state.docs.isLoading,
+    error:   state.docs.error,
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     update: () => dispatch(actions.update()),
-    setQuery: (q) => dispatch(actions.setQuery(q)),
   };
 }
 
-export const SearchContainer = connect(
+export const DocsContainer = connect(
   mapStateToProps,
   mapDispatchToProps
-)(Search);
+)(Docs);

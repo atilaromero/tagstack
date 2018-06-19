@@ -6,6 +6,7 @@ import GoogleUser from './components/auth/GoogleUser'
 // import Data from './components/Data'
 import { SearchContainer } from './components/Search'
 import { SourcesContainer } from './components/Sources'
+import { DocsContainer } from './components/Docs'
 
 import './App.css'
 
@@ -50,6 +51,7 @@ class App extends Component {
             <div className="col-md-12">
               <SourcesContainer/>
               <SearchContainer/>
+              <DocsContainer/>
               {/* <Data user={this.state.user} onData={this.updateData}/> */}
               {/* {(this.state.data) ?
                 (<C3Chart data={this.state.data}/>)

@@ -1,15 +1,13 @@
 import { call, put, takeEvery } from 'redux-saga/effects'
 
-const MODULE = 'SEARCH'
+const MODULE = 'DOCS'
 export const types = {
-  SET_QUERY: MODULE + '/SET_QUERY',
   LOAD_REQUEST: MODULE + '/LOAD_REQUEST',
   LOAD_SUCCESS: MODULE + '/LOAD_SUCCESS',
   LOAD_FAILURE: MODULE + '/LOAD_FAILURE',
 }
 
 export const initialState = {
-  query: '',
   data: [],
   isLoading: false,
   error: null
@@ -17,11 +15,8 @@ export const initialState = {
 
 export const reducer = (state = initialState, action) => {
   switch (action.type) {
-  case types.SET_QUERY:
-    return { ...state, query: action.query }
-
   case types.LOAD_REQUEST:
-    return { ...state, isLoading: true, error: null }
+    return { ...state, isLoading: true, error: null}
 
   case types.LOAD_SUCCESS:
     return { ...state, isLoading: false, data: action.data}
@@ -35,19 +30,17 @@ export const reducer = (state = initialState, action) => {
 }
 
 export const actions = {
-  update: () => ({ type: types.LOAD_REQUEST }),
-  setQuery: (query) => ({ type: types.SET_QUERY, query}),
+  update: () => ({ type: types.LOAD_REQUEST}),
 }
 
 export const selectors = {}
 
-export const saga = ({fetchSearch}) => function* (dispatch, getState)  {
+export const saga = ({fetchDocs}) => function* (dispatch, getState)  {
   yield takeEvery(types.LOAD_REQUEST, function* () {
     try {
       const state = yield getState()
-      const data = yield call(() => fetchSearch(state.search.query))
+      const data = yield call(() => fetchDocs(state.search.data))
       yield put({type: types.LOAD_SUCCESS, data})
-      yield put({type: 'DOCS/LOAD_REQUEST'})
     } catch (error) {
       yield put({type: types.LOAD_FAILURE, error: JSON.stringify(error)})
     }

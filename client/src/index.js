@@ -9,9 +9,11 @@ import createSagaMiddleware from 'redux-saga'
 
 import { saga as sourcesSaga } from './ducks/sources';
 import { saga as searchSaga } from './ducks/search';
+import { saga as docsSaga } from './ducks/docs';
 import { reducer } from './ducks';
 import { fetchSources } from './services/sources'
 import { fetchSearch } from './services/search'
+import { fetchDocs } from './services/docs'
 
 import App from './App';
 // import registerServiceWorker from './registerServiceWorker';
@@ -19,12 +21,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'd3/dist/d3.min.js'
 import 'c3/c3.min.js'
 import 'c3/c3.min.css'
-
-const URL = ''
-const ROUTES = {
-  sources: URL + '/sources',
-  search: URL + '/search',
-}
 
 const initialState = {};
 
@@ -44,11 +40,21 @@ const store = createStore(
   )
 )
 
+const URL = ''
+const ROUTES = {
+  sources: URL + '/sources',
+  search: URL + '/search',
+  docs: URL + '/docs',
+}
+
 sagaMiddleware.run(sourcesSaga({
   fetchSources: fetchSources({url: ROUTES.sources}),
 }))
 sagaMiddleware.run(searchSaga({
   fetchSearch:  fetchSearch({url: ROUTES.search}),
+}), store.dispatch, store.getState)
+sagaMiddleware.run(docsSaga({
+  fetchDocs:    fetchDocs({url: ROUTES.docs}),
 }), store.dispatch, store.getState)
 
 

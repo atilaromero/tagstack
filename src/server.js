@@ -3,6 +3,7 @@ const app = express()
 const path = require('path')
 const assert = require('assert')
 const fetch = require('node-fetch')
+const request = require('request')
 
 const REACT_APP_CLIENT_ID = process.env.REACT_APP_CLIENT_ID
 
@@ -46,27 +47,44 @@ app.use('/sources',
   }
 )
 
+app.use('/docs',
+  // auth_middleware,
+  (req, res) => {
+    const url = "http://0.0.0.0:8080/docs"
+    const r = request.post({uri: url, json: req.body})
+    req.pipe(r).pipe(res)
+  }
+)
 
-async function doSearch(query) {
-  const url = "http://0.0.0.0:8080/search/item02-M170206?q=" + encodeURIComponent(query)
-  const res2 = await fetch(url)
-  const data = res2.text()
-  return data
-}
 app.use('/search',
   // auth_middleware,
   (req, res) => {
-    doSearch(req.query.q)
-      .then(data => {
-        setTimeout(function () {
-          res.json({data})
-        }, 1000);
-      })
-      .catch(error => {
-        res.status(500).json({error})
-      })
+    const url = "http://0.0.0.0:8080" + req.url
+    const r = request(url)
+    req.pipe(r).pipe(res)
   }
 )
+
+// async function doSearch(query) {
+//   const url = "http://0.0.0.0:8080/search/item02-M170206?q=" + encodeURIComponent(query)
+//   const res2 = await fetch(url)
+//   const data = res2.text()
+//   return data
+// }
+// app.use('/search',
+//   // auth_middleware,
+//   (req, res) => {
+//     doSearch(req.query.q)
+//       .then(data => {
+//         setTimeout(function () {
+//           res.json({data})
+//         }, 1000);
+//       })
+//       .catch(error => {
+//         res.status(500).json({error})
+//       })
+//   }
+// )
 
 app.use('/data',
   auth_middleware,

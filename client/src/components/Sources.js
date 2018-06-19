@@ -12,29 +12,27 @@ export class Sources extends React.Component {
 
   render(){
     return (
-      <div className="row">
-        <div className="col-md-8 col-md-offset-2">
-          <div className="panel panel-default">
-            <div className="panel-body">
-              <h3>Sources</h3>
-              <hr/>
-              <List
-                listItems={this.props.list}
-                disabled={this.props.isLoading}
-              />
-              {(this.props.error) ?
-                <span style={{color: 'red'}}>Error: {this.props.error}</span>
-                :''
-              }
-              <hr/>
-            </div>
-          </div>
-        </div>
+      <div>
+        <h4>Sources</h4>
+        {/* <hr/> */}
+        <List
+          listItems={this.props.list}
+          disabled={this.props.isLoading}
+          select={this.props.select}
+          selected={this.props.selected}
+        />
+        {(this.props.error) ?
+          <span style={{color: 'red'}}>Error: {this.props.error}</span>
+          :''
+        }
+        <hr/>
       </div>
     );
   }
 }
 Sources.propTypes = {
+  select: PropTypes.func.isRequired,
+  selected: PropTypes.string,
   update: PropTypes.func.isRequired,
   list: PropTypes.array.isRequired,
   isLoading: PropTypes.bool.isRequired,
@@ -46,8 +44,11 @@ const List = (props) => {
     <ul>
       {props.listItems.map((el, i)=>(
         <li key={i} className="form-inline">
-          <div className="form-group">
-            <input type="checkbox" disabled={props.disabled}/>
+          <div className="form-group" onClick={e=>{
+            e.preventDefault()
+            props.select(el)
+          }}>
+            <input type="checkbox" checked={(el===props.selected)} disabled={props.disabled}/>
             <span disabled={props.disabled}> {el} </span>
           </div>
         </li>
@@ -56,6 +57,8 @@ const List = (props) => {
   )
 };
 List.propTypes = {
+  select: PropTypes.func.isRequired,
+  selected: PropTypes.string,
   listItems: PropTypes.array.isRequired,
   disabled: PropTypes.bool.isRequired,
 }
@@ -67,6 +70,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     update: () => dispatch(actions.update()),
+    select: (x) => dispatch(actions.select(x)),
   };
 }
 

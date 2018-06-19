@@ -1,6 +1,6 @@
-export const fetchSearch = ({url}) => async (q) => {
-  const response = await fetch(url+'?q=' + encodeURIComponent(q))
+export const fetchSearch = ({url}) => async (source, q) => {
+  const response = await fetch(url+'/'+encodeURIComponent(source)+'?q=' + encodeURIComponent(q))
   const json = await response.json()
-  const data = JSON.parse(json.data)
-  return data
+  // const data = JSON.parse(json.data)
+  return json
 }

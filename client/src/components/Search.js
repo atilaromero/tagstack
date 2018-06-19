@@ -21,10 +21,6 @@ export class Search extends Component {
           disabled={this.props.isLoading}
         />
         <hr/>
-        <List
-          listItems={this.props.data}
-          disabled={this.props.isLoading}
-        />
       </form>
     )
   }
@@ -37,24 +33,6 @@ Search.propTypes = {
   isLoading: PropTypes.bool.isRequired,
   error: PropTypes.string,
 }
-
-const List = (props) => {
-  return (
-    <ul>
-      {props.listItems.map((el, i)=>(
-        <li key={i} className="form-inline">
-          <input type="checkbox" disabled={props.disabled}/>
-          <span disabled={props.disabled}> {el} </span>
-        </li>
-      ))}
-    </ul>
-  )
-};
-List.propTypes = {
-  listItems: PropTypes.array.isRequired,
-  disabled: PropTypes.bool.isRequired,
-}
-
 
 function mapStateToProps(state) {
   return {

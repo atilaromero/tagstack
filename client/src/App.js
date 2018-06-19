@@ -3,14 +3,11 @@ import assert from 'assert'
 
 import NavTop from './components/auth/NavTop'
 import GoogleUser from './components/auth/GoogleUser'
-// import Data from './components/Data'
 import { SearchContainer } from './components/Search'
 import { SourcesContainer } from './components/Sources'
-import { DocsContainer } from './components/Docs'
+import { Tabs } from './components/Tabs'
 
 import './App.css'
-
-// import C3Chart from 'react-c3js';
 
 const REACT_APP_CLIENT_ID = process.env.REACT_APP_CLIENT_ID
 assert(REACT_APP_CLIENT_ID, 'REACT_APP_CLIENT_ID not set')
@@ -51,12 +48,7 @@ class App extends Component {
             <div className="col-md-12">
               <SourcesContainer/>
               <SearchContainer/>
-              <DocsContainer/>
-              {/* <Data user={this.state.user} onData={this.updateData}/> */}
-              {/* {(this.state.data) ?
-                (<C3Chart data={this.state.data}/>)
-                : (null)
-              } */}
+              <Tabs/>
             </div>
           </div>
         </div>

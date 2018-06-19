@@ -49,7 +49,7 @@ const ROUTES = {
 
 sagaMiddleware.run(sourcesSaga({
   fetchSources: fetchSources({url: ROUTES.sources}),
-}))
+}), store.dispatch, store.getState)
 sagaMiddleware.run(searchSaga({
   fetchSearch:  fetchSearch({url: ROUTES.search}),
 }), store.dispatch, store.getState)

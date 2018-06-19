@@ -59,7 +59,7 @@ app.use('/docs',
 app.use('/search',
   // auth_middleware,
   (req, res) => {
-    const url = "http://0.0.0.0:8080" + req.url
+    const url = "http://0.0.0.0:8080/search" + req.url
     const r = request(url)
     req.pipe(r).pipe(res)
   }

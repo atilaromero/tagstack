@@ -45,32 +45,61 @@ export class Tabs extends React.Component {
         <Nav tabs>
           <NavItem>
             <NavLink
-              className={classnames({ active: this.state.activeTab === '4' })}
-              onClick={() => { this.toggle('4'); }}>
-              Sample
+              className={classnames({ active: this.state.activeTab === '1' })}
+              onClick={() => { this.toggle('1'); }}>
+              Graphs
             </NavLink>
           </NavItem>
           <NavItem>
             <NavLink
-              className={classnames({ active: this.state.activeTab === '1' })}
-              onClick={() => { this.toggle('1'); }}>
-              Table
+              className={classnames({ active: this.state.activeTab === '2' })}
+              onClick={() => { this.toggle('2'); }}>
+              Only table
             </NavLink>
           </NavItem>
         </Nav>
         <TabContent activeTab={this.state.activeTab}>
           <TabPane tabId="1">
             <DocTableContainer/>
+            <C3Chart data={{
+              json: this.props.data,
+              type: 'area-spline',
+              selection: {
+                enabled: true,
+                grouped: true,
+                multiple: true,
+                draggable: true,
+              },
+              keys: {
+                value: ['st_size']
+              }
+            }}/>
+            <C3Chart data={{
+              json: this.props.data,
+              grid: {
+                y: {
+                  show: true
+                }
+              },
+              axis:{
+                y: {
+                  type: 'timeseries',
+                }
+              },
+              type: 'scatter',
+              selection: {
+                enabled: true,
+                grouped: true,
+                multiple: true,
+                draggable: true,
+              },
+              keys: {
+                value: ['st_atime', 'st_mtime', 'st_ctime', 'st_crtime']
+              }
+            }}/>
           </TabPane>
-          <TabPane tabId="4">
-            <C3Chart data={{
-              rows: this.props.data,
-              hide: 'md5|file|st_ino|st_ls|st_uid|st_gid|st_atime|st_mtime|st_ctime|st_crtime'.split('|')
-            }}/>
-            <C3Chart data={{
-              rows: this.props.data,
-              hide: 'md5|file|st_ino|st_ls|st_uid|st_gid|st_size'.split('|')
-            }}/>
+          <TabPane tabId="2">
+            <DocTableContainer/>
           </TabPane>
         </TabContent>
       </div>

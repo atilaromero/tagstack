@@ -13,12 +13,7 @@ const Element = (props) => {
       defaultPageSize={10}
       className="-striped -highlight"
       data = {props.data}
-      columns = {[
-        {
-          Header: 'a',
-          columns: headers.map(toHeader)
-        }
-      ]}
+      columns = {headers.map(toHeader)}
     />
   )
 };

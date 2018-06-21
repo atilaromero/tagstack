@@ -18,7 +18,13 @@ const sampleIlsEM = `md5|file|st_ino|st_ls|st_uid|st_gid|st_size|st_atime|st_mti
 0|<cfreds_2015_data_leakage_rm1.E01-design-alive-4099>|4099|-/drwxrwxrwx|0|0|32768|1424026328|1424026298|0|1424026328
 0|<cfreds_2015_data_leakage_rm1.E01-proposal-alive-4102>|4102|-/drwxrwxrwx|0|0|32768|1424026332|1424026298|0|1424026332`
 
+const maybeNumber = x => {
+  const n = Number(x)
+  return (isNaN(n))? x : n
+}
+
 function ilsEMtoData (s) {
+  const times = new Set(['st_atime', 'st_mtime', 'st_ctime', 'st_crtime', ])
   const h = s.split('\n').slice(0,1)[0].split('|')
   const data = s.split('\n').slice(1).map(x =>
     x.split('|')
@@ -26,7 +32,16 @@ function ilsEMtoData (s) {
     .map(l => {
       const j = {}
       l.forEach((x,i) => {
-        j[h[i]] = x
+        j[h[i]] = maybeNumber(x)
+        if (times.has(h[i])){
+          j[h[i]] = j[h[i]] * 1000
+          if (j[h[i]] === 0) {
+            j[h[i]] = null
+          // } else {
+          //   j[h[i]] = new Date(j[h[i]] * 1000)
+          //   j[h[i]] = j[h[i]].toISOString().split('T')[0]
+          }
+        }
       })
       return j
     })
@@ -38,7 +53,7 @@ const simpleSplit = (s) => {
 }
 
 export const initialState = {
-  data: simpleSplit(sampleIlsEM),
+  data: ilsEMtoData(sampleIlsEM),
   isLoading: false,
   error: null
 }

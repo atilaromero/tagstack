@@ -3,9 +3,7 @@ import assert from 'assert'
 
 import NavTop from './components/auth/NavTop'
 import GoogleUser from './components/auth/GoogleUser'
-import { SearchContainer } from './components/Search'
-import { SourcesContainer } from './components/Sources'
-import { Tabs } from './components/Tabs'
+import { TabsContainer } from './components/Tabs'
 
 import './App.css'
 
@@ -46,9 +44,7 @@ class App extends Component {
         <div className="container">
           <div className="row">
             <div className="col-md-12">
-              <SourcesContainer/>
-              <SearchContainer/>
-              <Tabs/>
+              <TabsContainer/>
             </div>
           </div>
         </div>

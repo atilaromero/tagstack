@@ -22,6 +22,7 @@
     "react-dom": "^16.4.0",
     "react-router-dom": "^4.2.2",
     "react-scripts": "1.1.4",
+    "react-table": "^6.8.6",
     "reactstrap": "^6.0.1"
   },
   "proxy": "http://localhost:8000/",

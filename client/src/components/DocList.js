@@ -6,7 +6,7 @@ const DocLister = (props) => {
     <ul>
       {props.data.map((el, i)=>(
         <li key={i}>
-          <span > {el.caminho} </span>
+          <span > {el.file} </span>
         </li>
       ))}
     </ul>

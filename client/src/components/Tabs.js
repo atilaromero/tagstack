@@ -47,14 +47,14 @@ export class Tabs extends React.Component {
             <NavLink
               className={classnames({ active: this.state.activeTab === '1' })}
               onClick={() => { this.toggle('1'); }}>
-              Graphs
+              Table + Graphs
             </NavLink>
           </NavItem>
           <NavItem>
             <NavLink
               className={classnames({ active: this.state.activeTab === '2' })}
               onClick={() => { this.toggle('2'); }}>
-              Only table
+              Table
             </NavLink>
           </NavItem>
         </Nav>

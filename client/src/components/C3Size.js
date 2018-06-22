@@ -10,12 +10,14 @@ class Element extends Component {
   componentDidMount() {
     this.createElement(this.props)
   }
-  componentWillReceiveProps(newProps) {
+  componentDidUpdate() {
     this.chart.load({
       ...this.options.data,
-      json: newProps.json,
+      json: this.props.json,
     })
-    this.chart.select([], newProps.selection, true)
+    const newSel = Array.from(new Set(this.props.selection)).sort()
+    this.chart.select(null, newSel, true)
+    console.log('size', newSel)
   }
   createElement(props) {
     this.options = {
@@ -31,8 +33,16 @@ class Element extends Component {
           multiple: true,
           draggable: true,
         },
-        onselected: sel => this.props.onselected(sel.index),
-        onunselected: sel => this.props.onunselected(sel.index),
+        onselected: sel => {
+          if (this.props.selection.indexOf(sel.index) === -1) {
+            this.props.onselected(sel.index)
+          }
+        },
+        onunselected: sel => {
+          if (this.props.selection.indexOf(sel.index) !== -1) {
+            this.props.onunselected(sel.index)
+          }
+        },
       },
       subchart: {
         show: true

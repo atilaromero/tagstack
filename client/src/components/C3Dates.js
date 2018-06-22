@@ -7,6 +7,7 @@ class Element extends Component {
   constructor(props){
     super(props)
     this.createElement = this.createElement.bind(this)
+    this.dontUpdate = false
   }
   componentWillMount() {
     this.id = 'id-'+uuidv4().slice(0,8);
@@ -14,12 +15,25 @@ class Element extends Component {
   componentDidMount() {
     this.createElement(this.props, this.id)
   }
-  componentWillReceiveProps(newProps) {
+  shouldComponentUpdate() {
+    return (!this.dontUpdate)
+  }
+  componentDidUpdate() {
+    if (!this.dontUpdate) {
+      setTimeout(() => {
+        if (this.dontUpdate){
+          this.dontUpdate = false
+          this.forceUpdate()
+        }
+      }, 10);
+    }
     this.chart.load({
       ...this.options.data,
-      json: newProps.json,
+      json: this.props.json,
     })
-    this.chart.select([], newProps.selection, true)
+    const newSel = Array.from(new Set(this.props.selection)).sort()
+    this.chart.select(null, newSel, true)
+    console.log('dates', newSel)
   }
   createElement(props, id) {
     this.options = {
@@ -43,8 +57,12 @@ class Element extends Component {
           multiple: true,
           draggable: true,
         },
-        onselected: sel => this.props.onselected(sel.index),
-        onunselected: sel => this.props.onunselected(sel.index),
+        onselected: sel => {
+          this.props.onselected(sel.index)
+        },
+        onunselected: sel => {
+          this.props.onunselected(sel.index)
+        },
       },
     }
     this.chart = c3.generate(this.options)

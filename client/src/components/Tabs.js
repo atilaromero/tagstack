@@ -10,7 +10,7 @@ import classnames from 'classnames';
 import PropTypes from 'prop-types'
 
 
-import C3Chart from 'react-c3js';
+// import C3Chart from 'react-c3js';
 // import Data from './Data'
 import DocContainer  from './DocContainer'
 // import DocSizes from './DocSizes'
@@ -19,8 +19,12 @@ import DocTable from './DocTable'
 
 // const DocSizesContainer = DocContainer(DocSizes)
 // const DocListContainer = DocContainer(DocList)
-const DocTableContainer = DocContainer(DocTable)
+// const DocTableContainer = DocContainer(DocTable)
 // const C3Container = DocContainer(C3Chart)
+
+// import BarChart from './BarChart'
+import C3Size from './C3Size'
+import C3Dates from './C3Dates'
 
 export class Tabs extends React.Component {
   constructor(props) {
@@ -28,7 +32,8 @@ export class Tabs extends React.Component {
 
     this.toggle = this.toggle.bind(this);
     this.state = {
-      activeTab: '1'
+      activeTab: '1',
+      visible: [],
     };
   }
 
@@ -60,46 +65,26 @@ export class Tabs extends React.Component {
         </Nav>
         <TabContent activeTab={this.state.activeTab}>
           <TabPane tabId="1">
-            <DocTableContainer/>
-            <C3Chart data={{
-              json: this.props.data,
-              type: 'area-spline',
-              selection: {
-                enabled: true,
-                grouped: true,
-                multiple: true,
-                draggable: true,
-              },
-              keys: {
-                value: ['st_size']
-              }
-            }}/>
-            <C3Chart data={{
-              json: this.props.data,
-              grid: {
-                y: {
-                  show: true
-                }
-              },
-              axis:{
-                y: {
-                  type: 'timeseries',
-                }
-              },
-              type: 'scatter',
-              selection: {
-                enabled: true,
-                grouped: true,
-                multiple: true,
-                draggable: true,
-              },
-              keys: {
-                value: ['st_atime', 'st_mtime', 'st_ctime', 'st_crtime']
-              }
-            }}/>
+            <DocTable
+              data={this.props.data}
+              fields={this.props.fields}
+              onVisible={data => {
+                this.setState({visible: data})
+              }}
+            />
+            <C3Size json={this.state.visible}
+              selection={this.props.selection}
+              onselected={this.props.select}
+              onunselected={this.props.unselect}
+            />
+            <C3Dates json={this.state.visible}
+              selection={this.props.selection}
+              onselected={this.props.select}
+              onunselected={this.props.unselect}
+            />
           </TabPane>
           <TabPane tabId="2">
-            <DocTableContainer/>
+            {/* <DocTableContainer/> */}
           </TabPane>
         </TabContent>
       </div>
@@ -108,6 +93,11 @@ export class Tabs extends React.Component {
 }
 Tabs.propTypes = {
   data: PropTypes.array.isRequired,
+  fields: PropTypes.array.isRequired,
+  selection: PropTypes.array.isRequired,
+  select: PropTypes.func.isRequired,
+  unselect: PropTypes.func.isRequired,
+  clear: PropTypes.func.isRequired,
 }
 
 export const TabsContainer = DocContainer(Tabs)

@@ -4,3 +4,8 @@
 :disabled {
     opacity: 0.5;
 }
+.rt-tr {
+   line-height: 1;
+   font-size: 0.7rem;
+   height: 20px;
+}

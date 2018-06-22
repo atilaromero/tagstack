@@ -1,19 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types'
 
-const DocLister = (props) => {
+const Element = (props) => {
   return (
     <ul>
       {props.data.map((el, i)=>(
         <li key={i}>
-          <span > {el.st_size} </span>
+          <span > {el.size} </span>
         </li>
       ))}
     </ul>
   )
 };
-DocLister.propTypes = {
+Element.propTypes = {
   data: PropTypes.array.isRequired,
 }
 
-export default DocLister
+export default Element

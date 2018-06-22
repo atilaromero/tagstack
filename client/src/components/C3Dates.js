@@ -7,7 +7,6 @@ class Element extends Component {
   constructor(props){
     super(props)
     this.createElement = this.createElement.bind(this)
-    this.dontUpdate = false
   }
   componentWillMount() {
     this.id = 'id-'+uuidv4().slice(0,8);
@@ -15,25 +14,23 @@ class Element extends Component {
   componentDidMount() {
     this.createElement(this.props, this.id)
   }
-  shouldComponentUpdate() {
-    return (!this.dontUpdate)
-  }
   componentDidUpdate() {
-    if (!this.dontUpdate) {
-      setTimeout(() => {
-        if (this.dontUpdate){
-          this.dontUpdate = false
-          this.forceUpdate()
-        }
-      }, 10);
-    }
+    // if (!this.dontUpdate) {
+    //   setTimeout(() => {
+    //     if (this.dontUpdate){
+    //       this.dontUpdate = false
+    //       this.forceUpdate()
+    //     }
+    //   }, 10);
+    // }
     this.chart.load({
       ...this.options.data,
       json: this.props.json,
     })
     const newSel = Array.from(new Set(this.props.selection)).sort()
+    this.disabled = true
     this.chart.select(null, newSel, true)
-    console.log('dates', newSel)
+    this.disabled = false
   }
   createElement(props, id) {
     this.options = {
@@ -55,13 +52,15 @@ class Element extends Component {
         selection: {
           enabled: true,
           multiple: true,
-          draggable: true,
+          // draggable: true,
         },
         onselected: sel => {
-          this.props.onselected(sel.index)
+          if (!this.disabled)
+            this.props.onselected(sel.index)
         },
         onunselected: sel => {
-          this.props.onunselected(sel.index)
+          if (!this.disabled)
+            this.props.onunselected(sel.index)
         },
       },
     }

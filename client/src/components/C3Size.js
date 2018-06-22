@@ -16,8 +16,9 @@ class Element extends Component {
       json: this.props.json,
     })
     const newSel = Array.from(new Set(this.props.selection)).sort()
+    this.disabled=true
     this.chart.select(null, newSel, true)
-    console.log('size', newSel)
+    this.disabled=false
   }
   createElement(props) {
     this.options = {
@@ -31,17 +32,15 @@ class Element extends Component {
         selection: {
           enabled: true,
           multiple: true,
-          draggable: true,
+          // draggable: true,
         },
         onselected: sel => {
-          if (this.props.selection.indexOf(sel.index) === -1) {
+          if (!this.disabled)
             this.props.onselected(sel.index)
-          }
         },
         onunselected: sel => {
-          if (this.props.selection.indexOf(sel.index) !== -1) {
+          if (!this.disabled)
             this.props.onunselected(sel.index)
-          }
         },
       },
       subchart: {

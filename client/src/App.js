@@ -5,8 +5,6 @@ import NavTop from './components/auth/NavTop'
 import GoogleUser from './components/auth/GoogleUser'
 import TabStack from './components/TabStack'
 import { DocTableContainer } from './components/DocTable'
-import { AddTagContainer } from './components/AddTag'
-import { TagListContainer } from './components/TagList'
 
 import './App.css'
 

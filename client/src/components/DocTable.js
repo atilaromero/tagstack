@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 import ReactTable from "react-table";
 import "react-table/react-table.css";
 import DocContainer from './DocContainer'
+import checkboxHOC from "react-table/lib/hoc/selectTable";
+const CheckboxTable = checkboxHOC(ReactTable);
 
 // const toHeader = x => ({ Header: x, accessor: x})
 
@@ -40,11 +42,27 @@ const columns = [
   // { Header: 'mime_type', accessor: 'mime_type' } ,
 ]
 
+const isSelected = (key, props) => {
+  return props.selection.includes(key)
+}
 const DocTable = (props) => (
   <ReactTable style={{}}
     defaultPageSize={10}
     className="-striped -highlight"
     data = {props.data}
+    filterable = {true}
+    selectType = "checkbox"
+    getTrProps = {
+      (s, r) => {
+        const selected = isSelected(r.original.obj_id, props);
+        return {
+          style: {
+            backgroundColor: selected ? "lightgreen" : "inherit"
+            // color: selected ? 'white' : 'inherit',
+          }
+        };
+      }
+    }
     columns = {columns}
     onFetchData = {state => {
       if (!state) return;
@@ -57,6 +75,7 @@ const DocTable = (props) => (
 DocTable.propTypes = {
   data: PropTypes.array.isRequired,
   fields: PropTypes.array.isRequired,
+  selection: PropTypes.array.isRequired,
   onVisible: PropTypes.func.isRequired,
 }
 

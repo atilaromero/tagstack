@@ -14,6 +14,7 @@ function mapDispatchToProps(dispatch) {
     select: x => dispatch(actions.select(x)),
     unselect: x => dispatch(actions.unselect(x)),
     clear: () => dispatch(actions.clear()),
+    onVisible: data => dispatch(actions.setVisibleData(data)),
   };
 }
 

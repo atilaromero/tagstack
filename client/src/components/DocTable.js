@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types'
 import ReactTable from "react-table";
 import "react-table/react-table.css";
+import DocContainer from './DocContainer'
 
 // const toHeader = x => ({ Header: x, accessor: x})
 
@@ -39,7 +40,7 @@ const columns = [
   // { Header: 'mime_type', accessor: 'mime_type' } ,
 ]
 
-const Element = (props) => (
+const DocTable = (props) => (
   <ReactTable style={{}}
     defaultPageSize={10}
     className="-striped -highlight"
@@ -53,14 +54,11 @@ const Element = (props) => (
     }}
   />
 )
-// class Element extends React.Component {
-//   render () {
-//   }
-// }
-Element.propTypes = {
+DocTable.propTypes = {
   data: PropTypes.array.isRequired,
   fields: PropTypes.array.isRequired,
   onVisible: PropTypes.func.isRequired,
 }
 
-export default Element
+export default DocTable
+export const DocTableContainer = DocContainer(DocTable)

@@ -17,7 +17,9 @@ export const types = {
   SELECT: MODULE + '/SELECT',
   UNSELECT: MODULE + '/UNSELECT',
   CLEAR: MODULE + '/CLEAR',
+  LOAD_TAG: MODULE + '/LOAD_TAG',
   SET_VISIBLE_DATA: MODULE + '/SET_VISIBLE_DATA',
+  ADD_TAG: MODULE + '/ADD_TAG',
   LOAD_REQUEST: MODULE + '/LOAD_REQUEST',
   LOAD_SUCCESS: MODULE + '/LOAD_SUCCESS',
   LOAD_FAILURE: MODULE + '/LOAD_FAILURE',
@@ -27,16 +29,22 @@ export const types = {
 export const initialState = {
   data,
   fields,
+  tags: {},
   visibleData: data,
   selection: [],
   isLoading: false,
   error: null
 }
 
+const toTagObj = (action, state) => {
+  const result = {}
+  result[action.tag] = state.selection
+  return result
+}
 export const reducer = (state = initialState, action) => {
   switch (action.type) {
   case types.SELECT:
-    return { ...state, selection: state.selection.concat([action.data]) }
+    return { ...state, selection: [...state.selection, action.data] }
 
   case types.UNSELECT:
     return { ...state, selection: state.selection.filter(x => x!==action.data)}
@@ -46,6 +54,12 @@ export const reducer = (state = initialState, action) => {
 
   case types.SET_VISIBLE_DATA:
     return { ...state, visibleData: action.data}
+
+  case types.ADD_TAG:
+    return { ...state, tags: {...state.tags, ...toTagObj(action,state)}}
+
+  case types.LOAD_TAG:
+    return { ...state, selection: state.tags[action.tag] }
 
   case types.LOAD_REQUEST:
     return { ...state, isLoading: true, error: null}
@@ -63,10 +77,12 @@ export const reducer = (state = initialState, action) => {
 
 export const actions = {
   update: () => ({ type: types.LOAD_REQUEST}),
-  select: x => ({ type: types.SELECT, data: x }),
-  unselect: x => ({ type: types.UNSELECT, data: x }),
+  select: data => ({ type: types.SELECT, data }),
+  loadTag: tag => ({ type: types.LOAD_TAG, tag }),
+  unselect: data => ({ type: types.UNSELECT, data }),
   clear: () => ({ type: types.CLEAR }),
   setVisibleData: (data) => ({ type: types.SET_VISIBLE_DATA, data }),
+  addTag: (tag) => ({ type: types.ADD_TAG, tag }),
 }
 
 export const selectors = {}

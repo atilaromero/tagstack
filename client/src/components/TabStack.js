@@ -4,22 +4,19 @@ import { TabsContainer } from './Tabs'
 
 const Element = () => {
   return (
-    <div className="container">
-      <div className="row">
-        <div className="col-md-12">
-          <TabsContainer
-            initialTab={1}
-          />
-          <TabsContainer
-            initialTab={2}
-            disableFirst={true}
-          />
-          <TabsContainer
-            initialTab={3}
-            disableFirst={true}
-          />
-        </div>
-      </div>
+    <div>
+      <TabsContainer
+        initialTab={2}
+        disableFirst={true}
+      />
+      <TabsContainer
+        initialTab={3}
+        disableFirst={true}
+      />
+      <TabsContainer
+        initialTab={4}
+        disableFirst={true}
+      />
     </div>
   )
 };

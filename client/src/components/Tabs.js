@@ -16,6 +16,8 @@ import DocTable from './DocTable'
 
 import C3Size from './C3Size'
 import C3Dates from './C3Dates'
+import { AddTagContainer } from './AddTag'
+import { TagListContainer } from './TagList'
 
 export class Tabs extends React.Component {
   constructor(props) {
@@ -56,13 +58,20 @@ export class Tabs extends React.Component {
             <NavLink
               className={classnames({ active: this.state.activeTab === '2' })}
               onClick={() => { this.toggle('2'); }}>
-              Size
+              Tags
             </NavLink>
           </NavItem>
           <NavItem>
             <NavLink
               className={classnames({ active: this.state.activeTab === '3' })}
               onClick={() => { this.toggle('3'); }}>
+              Size
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink
+              className={classnames({ active: this.state.activeTab === '4' })}
+              onClick={() => { this.toggle('4'); }}>
               Dates
             </NavLink>
           </NavItem>
@@ -79,13 +88,17 @@ export class Tabs extends React.Component {
             </TabPane>
           }
           <TabPane tabId="2">
+            <AddTagContainer/>
+            <TagListContainer/>
+          </TabPane>
+          <TabPane tabId="3">
             <C3Size json={this.props.visibleData}
               selection={this.props.selection}
               onselected={this.props.select}
               onunselected={this.props.unselect}
             />
           </TabPane>
-          <TabPane tabId="3">
+          <TabPane tabId="4">
             <C3Dates json={this.props.visibleData}
               selection={this.props.selection}
               onselected={this.props.select}

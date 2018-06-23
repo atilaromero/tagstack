@@ -82,6 +82,11 @@ export class Tabs extends React.Component {
               onselected={this.props.select}
               onunselected={this.props.unselect}
             />
+            {/* <C3Dates json={this.state.visible}
+              selection={this.props.selection}
+              onselected={this.props.select}
+              onunselected={this.props.unselect}
+            /> */}
           </TabPane>
           <TabPane tabId="2">
             {/* <DocTableContainer/> */}

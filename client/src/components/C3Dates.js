@@ -23,14 +23,29 @@ class Element extends Component {
     this.createElement(this.props, this.id)
   }
   componentDidUpdate() {
-    this.chart.load({
-      ...this.options.data,
-      json: this.props.json,
-    })
-    const newSel = Array.from(new Set(this.props.selection.map(this.idToIndex))).sort()
     this.disabled = true
-    this.chart.select(null, newSel, true)
-    this.disabled = false
+    const newSel = Array.from(new Set(this.props.selection.map(this.idToIndex).filter(x=> x!==-1))).sort()
+    try {
+      this.chart.load({
+        ...this.options.data,
+        json: this.props.json,
+      })
+      this.chart.select(null, newSel, true)
+      this.disabled = false
+    } catch (error) {
+      this.chart.unload({
+        done: () => {
+          this.chart.load({
+            ...this.options.data,
+            json: this.props.json,
+            done: () => {
+              this.chart.select(null, newSel, true)
+              this.disabled = false
+            }
+          })
+        }
+      })
+    }
   }
   createElement(props, id) {
     this.options = {

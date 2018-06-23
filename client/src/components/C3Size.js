@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import c3 from 'c3'
+const uuidv4 = require('uuid/v4')
 
-class Element extends Component {
+class C3Size extends Component {
   constructor(props){
     super(props)
-    this.createElement = this.createElement.bind(this)
+    this.createC3Size = this.createC3Size.bind(this)
     this.indexToID = this.indexToID.bind(this)
     this.idToIndex = this.idToIndex.bind(this)
   }
@@ -15,8 +16,11 @@ class Element extends Component {
   idToIndex(id) {
     return this.props.json.findIndex(x => x.obj_id === id)
   }
+  componentWillMount() {
+    this.id = 'id-'+uuidv4().slice(0,8);
+  }
   componentDidMount() {
-    this.createElement(this.props)
+    this.createC3Size(this.props, this.id)
   }
   componentDidUpdate() {
     this.disabled = true
@@ -43,9 +47,9 @@ class Element extends Component {
       })
     }
   }
-  createElement(props) {
+  createC3Size(props, id) {
     this.options = {
-      bindto: '#chart1',
+      bindto: '#'+id,
       data: {
         json: props.json,
         keys: {
@@ -74,14 +78,14 @@ class Element extends Component {
   }
   render() {
     return (
-      <div className="row" id="chart1"></div>
+      <div className="row" id={this.id}></div>
     )
   }
 }
-Element.propTypes = {
+C3Size.propTypes = {
   json: PropTypes.array.isRequired,
   selection: PropTypes.array.isRequired,
   onselected: PropTypes.func.isRequired,
   onunselected: PropTypes.func.isRequired,
 }
-export default Element
+export default C3Size

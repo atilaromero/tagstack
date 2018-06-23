@@ -3,7 +3,7 @@ import assert from 'assert'
 
 import NavTop from './components/auth/NavTop'
 import GoogleUser from './components/auth/GoogleUser'
-import { TabsContainer } from './components/Tabs'
+import TabStack from './components/TabStack'
 
 import './App.css'
 
@@ -41,13 +41,7 @@ class App extends Component {
           client_id={REACT_APP_CLIENT_ID}
         />
         <NavTop signedIn={this.state.signedIn} user={this.state.user}/>
-        <div className="container">
-          <div className="row">
-            <div className="col-md-12">
-              <TabsContainer/>
-            </div>
-          </div>
-        </div>
+        <TabStack/>
       </div>
     );
   }

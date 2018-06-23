@@ -3,10 +3,10 @@ import PropTypes from 'prop-types'
 import c3 from 'c3'
 const uuidv4 = require('uuid/v4')
 
-class Element extends Component {
+class C3Dates extends Component {
   constructor(props){
     super(props)
-    this.createElement = this.createElement.bind(this)
+    this.createC3Dates = this.createC3Dates.bind(this)
     this.indexToID = this.indexToID.bind(this)
     this.idToIndex = this.idToIndex.bind(this)
   }
@@ -20,7 +20,7 @@ class Element extends Component {
     this.id = 'id-'+uuidv4().slice(0,8);
   }
   componentDidMount() {
-    this.createElement(this.props, this.id)
+    this.createC3Dates(this.props, this.id)
   }
   componentDidUpdate() {
     this.disabled = true
@@ -47,7 +47,7 @@ class Element extends Component {
       })
     }
   }
-  createElement(props, id) {
+  createC3Dates(props, id) {
     this.options = {
       bindto: '#'+id,
       axis: {
@@ -88,10 +88,10 @@ class Element extends Component {
     )
   }
 }
-Element.propTypes = {
+C3Dates.propTypes = {
   json: PropTypes.array.isRequired,
   selection: PropTypes.array.isRequired,
   onselected: PropTypes.func.isRequired,
   onunselected: PropTypes.func.isRequired,
 }
-export default Element
+export default C3Dates

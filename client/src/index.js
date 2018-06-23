@@ -36,7 +36,7 @@ const store = createStore(
   initialState,
   applyMiddleware(
     sagaMiddleware,
-    logger,
+    // logger,
   )
 )
 

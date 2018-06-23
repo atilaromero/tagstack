@@ -17,6 +17,7 @@ export const types = {
   SELECT: MODULE + '/SELECT',
   UNSELECT: MODULE + '/UNSELECT',
   CLEAR: MODULE + '/CLEAR',
+  SET_VISIBLE_DATA: MODULE + '/SET_VISIBLE_DATA',
   LOAD_REQUEST: MODULE + '/LOAD_REQUEST',
   LOAD_SUCCESS: MODULE + '/LOAD_SUCCESS',
   LOAD_FAILURE: MODULE + '/LOAD_FAILURE',
@@ -26,6 +27,7 @@ export const types = {
 export const initialState = {
   data,
   fields,
+  visibleData: data,
   selection: [],
   isLoading: false,
   error: null
@@ -41,6 +43,9 @@ export const reducer = (state = initialState, action) => {
 
   case types.CLEAR:
     return { ...state, selection: []}
+
+  case types.SET_VISIBLE_DATA:
+    return { ...state, visibleData: action.data}
 
   case types.LOAD_REQUEST:
     return { ...state, isLoading: true, error: null}
@@ -61,6 +66,7 @@ export const actions = {
   select: x => ({ type: types.SELECT, data: x }),
   unselect: x => ({ type: types.UNSELECT, data: x }),
   clear: () => ({ type: types.CLEAR }),
+  setVisibleData: (data) => ({ type: types.SET_VISIBLE_DATA, data }),
 }
 
 export const selectors = {}

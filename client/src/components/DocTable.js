@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import ReactTable from "react-table";
 import "react-table/react-table.css";
 
-const toHeader = x => ({ Header: x, accessor: x})
+// const toHeader = x => ({ Header: x, accessor: x})
 
 const visible = (data, pageSize, page) => {
   return data.slice(page*pageSize,(page+1)*pageSize)

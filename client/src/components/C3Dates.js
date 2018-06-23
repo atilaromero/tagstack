@@ -7,6 +7,14 @@ class Element extends Component {
   constructor(props){
     super(props)
     this.createElement = this.createElement.bind(this)
+    this.indexToID = this.indexToID.bind(this)
+    this.idToIndex = this.idToIndex.bind(this)
+  }
+  indexToID(index) {
+    return this.props.json[index].obj_id
+  }
+  idToIndex(id) {
+    return this.props.json.findIndex(x => x.obj_id === id)
   }
   componentWillMount() {
     this.id = 'id-'+uuidv4().slice(0,8);
@@ -15,19 +23,11 @@ class Element extends Component {
     this.createElement(this.props, this.id)
   }
   componentDidUpdate() {
-    // if (!this.dontUpdate) {
-    //   setTimeout(() => {
-    //     if (this.dontUpdate){
-    //       this.dontUpdate = false
-    //       this.forceUpdate()
-    //     }
-    //   }, 10);
-    // }
     this.chart.load({
       ...this.options.data,
       json: this.props.json,
     })
-    const newSel = Array.from(new Set(this.props.selection)).sort()
+    const newSel = Array.from(new Set(this.props.selection.map(this.idToIndex))).sort()
     this.disabled = true
     this.chart.select(null, newSel, true)
     this.disabled = false
@@ -46,8 +46,9 @@ class Element extends Component {
       data: {
         json: props.json,
         keys: {
-          value: ['atime', 'mtime', 'crtime']
+          value: ['obj_id', 'atime', 'mtime', 'crtime']
         },
+        hide: ['obj_id'],
         type: 'scatter',
         selection: {
           enabled: true,
@@ -56,11 +57,11 @@ class Element extends Component {
         },
         onselected: sel => {
           if (!this.disabled)
-            this.props.onselected(sel.index)
+            this.props.onselected(this.indexToID(sel.index))
         },
         onunselected: sel => {
           if (!this.disabled)
-            this.props.onunselected(sel.index)
+            this.props.onunselected(this.indexToID(sel.index))
         },
       },
     }

@@ -9,12 +9,42 @@ const visible = (data, pageSize, page) => {
   return data.slice(page*pageSize,(page+1)*pageSize)
 }
 
+const columns = [
+  { Header: 'obj_id', accessor: 'obj_id' },
+  // { Header: 'fs_obj_id', accessor: 'fs_obj_id' },
+  // { Header: 'data_source_obj_id', accessor: 'data_source_obj_id' },
+  // { Header: 'attr_type', accessor: 'attr_type' },
+  // { Header: 'attr_id', accessor: 'attr_id' },
+  { Header: 'parent_path', accessor: 'parent_path' },
+  { Header: 'name', accessor: 'name' },
+  // { Header: 'meta_addr', accessor: 'meta_addr' },
+  // { Header: 'meta_seq', accessor: 'meta_seq' },
+  // { Header: 'type', accessor: 'type' },
+  // { Header: 'has_layout', accessor: 'has_layout' },
+  // { Header: 'has_path', accessor: 'has_path' },
+  { Header: 'size', accessor: 'size' },
+  // { Header: 'ctime', accessor: 'ctime' },
+  { Header: 'crtime', accessor: 'crtime' },
+  { Header: 'atime', accessor: 'atime' },
+  { Header: 'mtime', accessor: 'mtime' },
+  { Header: 'dir_type', accessor: 'dir_type' },
+  { Header: 'meta_type', accessor: 'meta_type' },
+  { Header: 'dir_flags', accessor: 'dir_flags' },
+  { Header: 'meta_flags', accessor: 'meta_flags' },
+  { Header: 'mode', accessor: 'mode' },
+  { Header: 'uid', accessor: 'uid' },
+  { Header: 'gid', accessor: 'gid' },
+  // { Header: 'md5', accessor: 'md5' },
+  // { Header: 'known', accessor: 'known' },
+  // { Header: 'mime_type', accessor: 'mime_type' } ,
+]
+
 const Element = (props) => (
   <ReactTable style={{}}
     defaultPageSize={10}
     className="-striped -highlight"
     data = {props.data}
-    columns = {props.fields.map(toHeader)}
+    columns = {columns}
     onFetchData = {state => {
       if (!state) return;
       const data = visible(state.sortedData, state.pageSize, state.page)

@@ -54,7 +54,12 @@ const DocTable = (props) => (
     selectType = "checkbox"
     getTrProps = {
       (s, r) => {
-        const selected = isSelected(r.original.obj_id, props);
+        let selected = false
+        try {
+          selected = isSelected(r.original.obj_id, props);
+        } catch(error) {
+          selected = false
+        }
         return {
           style: {
             backgroundColor: selected ? "lightgreen" : "inherit"
@@ -77,6 +82,9 @@ DocTable.propTypes = {
   fields: PropTypes.array.isRequired,
   selection: PropTypes.array.isRequired,
   onVisible: PropTypes.func.isRequired,
+  select: PropTypes.func.isRequired,
+  unselect: PropTypes.func.isRequired,
+
 }
 
 export default DocTable

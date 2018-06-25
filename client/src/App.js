@@ -45,7 +45,13 @@ class App extends Component {
         <div className="container">
           <div className="row">
             <div className="col-md-12">
-              <DocTableContainer/>
+              <div className="container">
+                <div className="row">
+                  <div className="col-md-12 rounded border">
+                    <DocTableContainer/>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           <div className="row">

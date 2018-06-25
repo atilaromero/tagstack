@@ -11,9 +11,61 @@ const CheckboxTable = checkboxHOC(ReactTable);
 const visible = (data, pageSize, page) => {
   return data.slice(page*pageSize,(page+1)*pageSize)
 }
+const stringFilter = (filter, row) => {
+  const value = String(row[filter.id])
+  const expr = filter.value
+  return value.includes(expr)
+}
+const dateFilter = (filter, row) => {
+  const value = new Date(row[filter.id])
+  const expr = filter.value
+  if (expr.startsWith('>=')) try {
+    return (new Date(value) >= new Date(expr.slice(2)))
+  } catch (error) { /**/ }
+  if (expr.startsWith('<=')) try {
+    return (new Date(value) <= new Date(expr.slice(2)))
+  } catch (error) { /**/ }
+  if (expr.startsWith('==')) try {
+    return (new Date(value) === new Date(expr.slice(2)))
+  } catch (error) { /**/ }
+  if (expr.startsWith('=')) try {
+    return (new Date(value) === new Date(expr.slice(1)))
+  } catch (error) { /**/ }
+  if (expr.startsWith('>')) try {
+    return (new Date(value) > new Date(expr.slice(1)))
+  } catch (error) {/**/}
+  if (expr.startsWith('<')) try {
+    return (new Date(value) < new Date(expr.slice(1)))
+  } catch (error) { /**/ }
+  return stringFilter(filter, row)
+}
+const numberFilter = (filter, row) => {
+  const value = String(row[filter.id])
+  const expr = filter.value
+  if (expr.startsWith('>=')) try {
+    return (Number(value) >= Number(expr.slice(2)))
+  } catch (error) { /**/ }
+  if (expr.startsWith('<=')) try {
+    return (Number(value) <= Number(expr.slice(2)))
+  } catch (error) { /**/ }
+  if (expr.startsWith('==')) try {
+    return (Number(value) === Number(expr.slice(2)))
+  } catch (error) { /**/ }
+  if (expr.startsWith('=')) try {
+    return (Number(value) === Number(expr.slice(1)))
+  } catch (error) { /**/ }
+  if (expr.startsWith('>')) try {
+    return (Number(value) > Number(expr.slice(1)))
+  } catch (error) { /**/ }
+  if (expr.startsWith('<')) try {
+    return (Number(value) < Number(expr.slice(1)))
+  } catch (error) { /**/ }
+  return (Number(value) === Number(expr))
+}
 
 const columns = [
-  { Header: 'obj_id', accessor: 'obj_id' },
+  { Header: 'obj_id', accessor: 'obj_id',
+    filterMethod: numberFilter },
   // { Header: 'fs_obj_id', accessor: 'fs_obj_id' },
   // { Header: 'data_source_obj_id', accessor: 'data_source_obj_id' },
   // { Header: 'attr_type', accessor: 'attr_type' },
@@ -25,24 +77,35 @@ const columns = [
   // { Header: 'type', accessor: 'type' },
   // { Header: 'has_layout', accessor: 'has_layout' },
   // { Header: 'has_path', accessor: 'has_path' },
-  { Header: 'size', accessor: 'size' },
+  { Header: 'size', accessor: 'size',
+    filterMethod: numberFilter },
   // { Header: 'ctime', accessor: 'ctime' },
   { Header: 'crtime', accessor: 'crtime',
-    Cell: ({value}) => (new Date(value).toISOString())
+    Cell: ({value}) => (new Date(value).toISOString()),
+    filterMethod: dateFilter
   },
   { Header: 'atime', accessor: 'atime',
-    Cell: ({value}) => (new Date(value).toISOString())
+    Cell: ({value}) => (new Date(value).toISOString()),
+    filterMethod: dateFilter
   },
   { Header: 'mtime', accessor: 'mtime',
-    Cell: ({value}) => (new Date(value).toISOString())
+    Cell: ({value}) => (new Date(value).toISOString()),
+    filterMethod: dateFilter
   },
-  { Header: 'dir_type', accessor: 'dir_type' },
-  { Header: 'meta_type', accessor: 'meta_type' },
-  { Header: 'dir_flags', accessor: 'dir_flags' },
-  { Header: 'meta_flags', accessor: 'meta_flags' },
-  { Header: 'mode', accessor: 'mode' },
-  { Header: 'uid', accessor: 'uid' },
-  { Header: 'gid', accessor: 'gid' },
+  { Header: 'dir_type', accessor: 'dir_type',
+    filterMethod: numberFilter },
+  { Header: 'meta_type', accessor: 'meta_type',
+    filterMethod: numberFilter },
+  { Header: 'dir_flags', accessor: 'dir_flags',
+    filterMethod: numberFilter },
+  { Header: 'meta_flags', accessor: 'meta_flags',
+    filterMethod: numberFilter },
+  { Header: 'mode', accessor: 'mode',
+    filterMethod: numberFilter },
+  { Header: 'uid', accessor: 'uid',
+    filterMethod: numberFilter },
+  { Header: 'gid', accessor: 'gid',
+    filterMethod: numberFilter },
   // { Header: 'md5', accessor: 'md5' },
   // { Header: 'known', accessor: 'known' },
   // { Header: 'mime_type', accessor: 'mime_type' } ,
@@ -58,10 +121,17 @@ const toggleSelection = (key, props) => {
     props.select(key)
   }
 }
+const calcPageSizeOptions = (dataLength) => {
+  const result = [5, 10, 20, 25, 50, 100]
+    .filter(x => x < dataLength)
+  return [...result, dataLength].filter(x => x<= 100)
+}
 const DocTable = (props) => (
   <CheckboxTable
     keyField='obj_id'
     style={{}}
+    defaultFilterMethod={stringFilter}
+    pageSizeOptions={calcPageSizeOptions(props.data.length)}
     defaultPageSize={10}
     className="-striped -highlight"
     data = {props.data}

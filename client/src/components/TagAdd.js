@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux';
 import { actions } from '../ducks/docs';
 
-export class AddTag extends Component {
+export class TagAdd extends Component {
   constructor(props) {
     super(props);
     this.state = {value: ''};
@@ -20,17 +20,25 @@ export class AddTag extends Component {
   }
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
-        <input type="submit" value="Save selection as:"/>
-        <input required type="text"
-          value={this.state.value}
-          onChange={this.handleChange}
-        />
+      <form onSubmit={this.handleSubmit}  style={{paddingTop: '10px'}}>
+        <div className="input-group mb-3">
+          <div className="input-group-prepend">
+            <input className="btn btn-primary"
+              type="submit" value="Tag"/>
+          </div>
+          <input required type="text"
+            className="form-control"
+            placeholder="tag selection as"
+            aria-label="labelalskdflksjd"
+            value={this.state.value}
+            onChange={this.handleChange}
+          />
+        </div>
       </form>
     )
   }
 }
-AddTag.propTypes = {
+TagAdd.propTypes = {
   addTag: PropTypes.func.isRequired,
 }
 
@@ -45,7 +53,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export const AddTagContainer = connect(
+export const TagAddContainer = connect(
   mapStateToProps,
   mapDispatchToProps
-)(AddTag);
+)(TagAdd);

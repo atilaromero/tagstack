@@ -9,3 +9,18 @@
    font-size: 0.7rem;
    height: 20px;
 }
+
+.rounded {
+  border-radius: .60rem;
+}
+
+.border {
+  border-color: grey;
+  padding: 4px;
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
+::placeholder {
+  opacity: 0.4!important;
+}

@@ -8,7 +8,8 @@ const TagList = (props) => {
     <ul>
       {Object.keys(props.tags).map((el, i)=>(
         <li key={i}>
-          <button onClick={() => props.onClick(el)}> {el} </button>
+          <button className="btn btn-outline-primary"
+            onClick={() => props.onClick(el)}> {el} </button>
         </li>
       ))}
     </ul>

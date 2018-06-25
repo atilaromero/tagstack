@@ -27,9 +27,15 @@ const columns = [
   // { Header: 'has_path', accessor: 'has_path' },
   { Header: 'size', accessor: 'size' },
   // { Header: 'ctime', accessor: 'ctime' },
-  { Header: 'crtime', accessor: 'crtime' },
-  { Header: 'atime', accessor: 'atime' },
-  { Header: 'mtime', accessor: 'mtime' },
+  { Header: 'crtime', accessor: 'crtime',
+    Cell: ({value}) => (new Date(value).toISOString())
+  },
+  { Header: 'atime', accessor: 'atime',
+    Cell: ({value}) => (new Date(value).toISOString())
+  },
+  { Header: 'mtime', accessor: 'mtime',
+    Cell: ({value}) => (new Date(value).toISOString())
+  },
   { Header: 'dir_type', accessor: 'dir_type' },
   { Header: 'meta_type', accessor: 'meta_type' },
   { Header: 'dir_flags', accessor: 'dir_flags' },
@@ -45,18 +51,46 @@ const columns = [
 const isSelected = (key, props) => {
   return props.selection.includes(key)
 }
+const toggleSelection = (key, props) => {
+  if (isSelected(key, props)) {
+    props.unselect(key)
+  } else {
+    props.select(key)
+  }
+}
 const DocTable = (props) => (
-  <ReactTable style={{}}
+  <CheckboxTable
+    keyField='obj_id'
+    style={{}}
     defaultPageSize={10}
     className="-striped -highlight"
     data = {props.data}
     filterable = {true}
     selectType = "checkbox"
+    isSelected = {key => isSelected(key, props)}
+    toggleAll = {() => {
+      if (
+        props.visibleData
+          .map(x => x.obj_id)
+          .map(obj_id => isSelected(obj_id,props))
+          .filter(isSel => isSel === false)
+          .length > 0
+      ) {
+        props.visibleData
+          .map(x => x.obj_id)
+          .map(obj_id => props.select(obj_id))
+      } else {
+        props.visibleData
+          .map(x => x.obj_id)
+          .map(obj_id => props.unselect(obj_id))
+      }
+    }}
+    toggleSelection = {key => toggleSelection(key, props)}
     getTrProps = {
-      (s, r) => {
+      (state, rowInfo) => {
         let selected = false
         try {
-          selected = isSelected(r.original.obj_id, props);
+          selected = isSelected(rowInfo.original.obj_id, props);
         } catch(error) {
           selected = false
         }
@@ -64,7 +98,8 @@ const DocTable = (props) => (
           style: {
             backgroundColor: selected ? "lightgreen" : "inherit"
             // color: selected ? 'white' : 'inherit',
-          }
+          },
+          onClick: () => toggleSelection(rowInfo.original.obj_id, props)
         };
       }
     }
@@ -79,6 +114,7 @@ const DocTable = (props) => (
 )
 DocTable.propTypes = {
   data: PropTypes.array.isRequired,
+  visibleData: PropTypes.array.isRequired,
   fields: PropTypes.array.isRequired,
   selection: PropTypes.array.isRequired,
   onVisible: PropTypes.func.isRequired,

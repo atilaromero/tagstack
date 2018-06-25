@@ -4,6 +4,7 @@ import { actions } from '../ducks/docs'
 function mapStateToProps(state) {
   return {
     data:   state.docs.data,
+    visibleData: state.docs.visibleData,
     selection: state.docs.selection,
     fields: state.docs.fields,
   }

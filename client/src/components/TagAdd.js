@@ -17,14 +17,15 @@ export class TagAdd extends Component {
   handleSubmit(event) {
     event.preventDefault();
     this.props.addTag(this.state.value)
+    this.setState({value: ''});
   }
   render() {
     return (
-      <form onSubmit={this.handleSubmit}  style={{paddingTop: '10px'}}>
+      <form onSubmit={this.handleSubmit}>
         <div className="input-group mb-3">
           <div className="input-group-prepend">
             <input className="btn btn-primary"
-              type="submit" value="Tag"/>
+              type="submit" value="Add/override tag"/>
           </div>
           <input required type="text"
             className="form-control"

@@ -14,6 +14,7 @@ const fields = require('../data.json').meta.fields
 
 const MODULE = 'DOCS'
 export const types = {
+  SET_SELECTION: MODULE + '/SET_SELECTION',
   SELECT: MODULE + '/SELECT',
   UNSELECT: MODULE + '/UNSELECT',
   CLEAR: MODULE + '/CLEAR',
@@ -43,6 +44,9 @@ const toTagObj = (action, state) => {
 }
 export const reducer = (state = initialState, action) => {
   switch (action.type) {
+  case types.SET_SELECTION:
+    return { ...state, selection: action.data }
+
   case types.SELECT:
     return { ...state, selection: [...state.selection, action.data] }
 
@@ -77,6 +81,7 @@ export const reducer = (state = initialState, action) => {
 
 export const actions = {
   update: () => ({ type: types.LOAD_REQUEST}),
+  setSelection: data => ({ type: types.SET_SELECTION, data }),
   select: data => ({ type: types.SELECT, data }),
   loadTag: tag => ({ type: types.LOAD_TAG, tag }),
   unselect: data => ({ type: types.UNSELECT, data }),
@@ -85,7 +90,9 @@ export const actions = {
   addTag: (tag) => ({ type: types.ADD_TAG, tag }),
 }
 
-export const selectors = {}
+export const selectors = {
+  getVisibleIds: state => state.visibleData.map(x => x.obj_id)
+}
 
 export const saga = ({fetchDocs}) => function* (dispatch, getState)  {
   yield takeEvery(types.LOAD_REQUEST, function* () {

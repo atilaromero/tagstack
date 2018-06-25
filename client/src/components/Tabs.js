@@ -16,7 +16,7 @@ import DocTable from './DocTable'
 
 import C3Size from './C3Size'
 import C3Dates from './C3Dates'
-import TagGroup from './TagGroup'
+import { TagGroupContainer } from './TagGroup'
 
 export class Tabs extends React.Component {
   constructor(props) {
@@ -87,7 +87,7 @@ export class Tabs extends React.Component {
             </TabPane>
           }
           <TabPane tabId="2">
-            <TagGroup/>
+            <TagGroupContainer/>
           </TabPane>
           <TabPane tabId="3">
             <C3Size json={this.props.visibleData}

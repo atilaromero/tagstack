@@ -12,5 +12,5 @@ const convert = (csv) => {
 if (typeof require != 'undefined' && require.main===module) {
   const fs = require('fs')
   const csv = fs.readFileSync(process.argv[2], 'utf8')
-  console.log(JSON.stringify(convert(csv),null,2))
+  console.log(JSON.stringify(convert(csv).data,null,2))
 }

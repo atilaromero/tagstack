@@ -10,7 +10,7 @@ export const types = {
 
 export const initialState = {
   selected: null,
-  list: [],
+  list: {},
   isLoading: false,
   error: null
 }
@@ -48,7 +48,7 @@ export const saga = ({fetchSources}) => function* (dispatch, getState)  {
       yield put({type: types.LOAD_SUCCESS, data})
       const state = getState()
       if (!state.sources.selected && state.sources.list) {
-        yield put({type: types.SELECT, item:state.sources.list[0]})
+        yield put({type: types.SELECT, item:Object.keys(state.sources.list)[0]})
       }
     } catch (error) {
       yield put({type: types.LOAD_FAILURE, error})

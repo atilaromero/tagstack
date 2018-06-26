@@ -4,6 +4,9 @@ import { connect } from 'react-redux';
 import {
   actions
 } from '../ducks/sources';
+import {
+  actions as docActions
+} from '../ducks/docs';
 
 export class Sources extends React.Component {
   componentDidMount() {
@@ -26,6 +29,11 @@ export class Sources extends React.Component {
           :''
         }
         <hr/>
+        <button className='btn btn-outline-primary'
+          onClick={this.props.updateDocs}>
+          Update
+        </button>
+        <hr/>
       </div>
     );
   }
@@ -34,7 +42,8 @@ Sources.propTypes = {
   select: PropTypes.func.isRequired,
   selected: PropTypes.string,
   update: PropTypes.func.isRequired,
-  list: PropTypes.array.isRequired,
+  updateDocs: PropTypes.func.isRequired,
+  list: PropTypes.object.isRequired,
   isLoading: PropTypes.bool.isRequired,
   error: PropTypes.string,
 }
@@ -42,12 +51,13 @@ Sources.propTypes = {
 const List = (props) => {
   return (
     <ul>
-      {props.listItems.map((el, i)=>(
-        <li key={i} className="form-inline">
+      {Object.keys(props.listItems).map((el)=>(
+        <li key={el} className="form-inline">
           <div className="form-group" onClick={e=>{
             e.preventDefault()
             props.select(el)
           }}>
+            {console.log(el===props.selected, el, props.selected)}
             <input type="checkbox" checked={(el===props.selected)} disabled={props.disabled}/>
             <span disabled={props.disabled}> {el} </span>
           </div>
@@ -59,7 +69,7 @@ const List = (props) => {
 List.propTypes = {
   select: PropTypes.func.isRequired,
   selected: PropTypes.string,
-  listItems: PropTypes.array.isRequired,
+  listItems: PropTypes.object.isRequired,
   disabled: PropTypes.bool.isRequired,
 }
 
@@ -70,6 +80,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     update: () => dispatch(actions.update()),
+    updateDocs: () => dispatch(docActions.update()),
     select: (x) => dispatch(actions.select(x)),
   };
 }

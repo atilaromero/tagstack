@@ -1,16 +1,16 @@
 import { call, put, takeEvery } from 'redux-saga/effects'
 
-const data = require('../data.json').data.map(l => {
-  ['atime', 'mtime', 'ctime', 'crtime'].forEach(x => {
-    if (l[x] === 0) {
-      l[x] = null
-    } else {
-      l[x] = l[x] * 1000
-    }
-  })
-  return l
-})
-const fields = require('../data.json').meta.fields
+// const data = require('../data.json').data.map(l => {
+//   ['atime', 'mtime', 'ctime', 'crtime'].forEach(x => {
+//     if (l[x] === 0) {
+//       l[x] = null
+//     } else {
+//       l[x] = l[x] * 1000
+//     }
+//   })
+//   return l
+// })
+// const fields = require('../data.json').meta.fields
 
 const MODULE = 'DOCS'
 export const types = {
@@ -28,10 +28,10 @@ export const types = {
 
 
 export const initialState = {
-  data,
-  fields,
+  data: [],
+  fields: [],
   tags: {},
-  visibleData: data,
+  visibleData: [],
   selection: [],
   isLoading: false,
   error: null
@@ -98,7 +98,8 @@ export const saga = ({fetchDocs}) => function* (dispatch, getState)  {
   yield takeEvery(types.LOAD_REQUEST, function* () {
     try {
       const state = yield getState()
-      const data = yield call(() => fetchDocs(state.search.data))
+      console.log(1234,state.sources.list[state.sources.selected].urls.docs)
+      const data = yield call(() => fetchDocs(state.sources.list[state.sources.selected].urls.docs))
       yield put({type: types.LOAD_SUCCESS, data})
     } catch (error) {
       yield put({type: types.LOAD_FAILURE, error: JSON.stringify(error)})

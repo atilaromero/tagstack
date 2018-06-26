@@ -45,11 +45,8 @@ export const saga = ({fetchSearch}) => function* (dispatch, getState)  {
   yield takeEvery(types.LOAD_REQUEST, function* () {
     try {
       const state = yield getState()
-      console.log(1)
       const data = yield call(() => fetchSearch(state.sources.selected, state.search.query))
-      console.log(2)
       yield put({type: types.LOAD_SUCCESS, data})
-      console.log(3)
       yield put({type: 'DOCS/LOAD_REQUEST'})
     } catch (error) {
       yield put({type: types.LOAD_FAILURE, error: JSON.stringify(error)})

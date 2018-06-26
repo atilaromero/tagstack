@@ -1,4 +1,11 @@
-export const fetchDocs = ({url}) => async (docs) => {
+export const fetchDocs = ({url1}) => async (url) => {
+  const response = await fetch(url)
+  const json = await response.json()
+  console.log(json)
+  return json
+}
+
+export const fetchSearchDocs = ({url1}) => async (url, source, docs) => {
   const selection = docs.map(x=>['item02-M170206',x])
   const response = await fetch(url, {
     method: 'POST',

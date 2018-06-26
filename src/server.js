@@ -31,15 +31,44 @@ app.use('/tags',
 async function doSources() {
   const url = "http://0.0.0.0:8080/sources"
   const res2 = await fetch(url)
-  const data = res2.text()
-  return data
+  return res2.json()
 }
 app.use('/sources',
   // auth_middleware,
   (req, res) => {
     doSources()
       .then(data => {
-        res.json({data})
+        const result = {}
+        data.forEach(x => {
+          result[x] = {
+            id: x,
+            urls: {
+              docs: '',
+              search: '',
+            },
+            fields: [],
+          }
+        })
+        return result
+      })
+      .then(data => ({...data, teste: {
+        id: 'teste',
+        urls: {
+          docs: 'https://raw.githubusercontent.com/atilaromero/tagstack/development/client/src/data.json',
+          // search: '',
+        },
+        fields: {
+          obj_id: {type: 'number'},
+          parent_path: {type: 'string'},
+          name: {type: 'string'},
+          size: {type: 'number'},
+          crtime: {type: 'date-time'},
+          atime: {type: 'date-time'},
+          mtime: {type: 'date-time'},
+        }
+      }}))
+      .then(data => {
+        res.json(data)
       })
       .catch(error => {
         res.status(500).json({error})

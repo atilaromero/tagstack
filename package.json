@@ -1,0 +1,23 @@
+{
+  "name": "datasets",
+  "version": "1.0.0",
+  "description": "",
+  "main": "csv2json.js",
+  "dependencies": {
+    "papaparse": "^4.5.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/atilaromero/tagstack.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/atilaromero/tagstack/issues"
+  },
+  "homepage": "https://github.com/atilaromero/tagstack#readme"
+}

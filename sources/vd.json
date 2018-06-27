@@ -1,8 +1,38 @@
 {
-  "teste": {
-    "id": "teste",
+  "RM1": {
+    "id": "RM1",
     "urls": {
-      "docs": "https://raw.githubusercontent.com/atilaromero/tagstack/development/client/src/data.json"
+      "docs": "https://github.com/atilaromero/tagstack/raw/datasets/data_leakage/RM1/data.json"
+    },
+    "fields": {
+      "obj_id": {
+        "type": "number"
+      },
+      "parent_path": {
+        "type": "string"
+      },
+      "name": {
+        "type": "string"
+      },
+      "size": {
+        "type": "number"
+      },
+      "crtime": {
+        "type": "date-time"
+      },
+      "atime": {
+        "type": "date-time"
+      },
+      "mtime": {
+        "type": "date-time"
+      }
+    }
+  }
+  ,
+  "RM2": {
+    "id": "RM2",
+    "urls": {
+      "docs": "https://github.com/atilaromero/tagstack/raw/datasets/data_leakage/RM1/data.json"
     },
     "fields": {
       "obj_id": {

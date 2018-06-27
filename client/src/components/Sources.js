@@ -53,12 +53,10 @@ const List = (props) => {
     <ul>
       {Object.keys(props.listItems).map((el)=>(
         <li key={el} className="form-inline">
-          <div className="form-group" onClick={e=>{
-            e.preventDefault()
+          <div className="form-group" onClick={()=>{
             props.select(el)
           }}>
-            {console.log(el===props.selected, el, props.selected)}
-            <input type="checkbox" checked={(el===props.selected)} disabled={props.disabled}/>
+            <input type="checkbox" checked={el===props.selected} disabled={props.disabled}/>
             <span disabled={props.disabled}> {el} </span>
           </div>
         </li>

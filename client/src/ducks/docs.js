@@ -69,7 +69,7 @@ export const reducer = (state = initialState, action) => {
     return { ...state, isLoading: true, error: null}
 
   case types.LOAD_SUCCESS:
-    return { ...state, isLoading: false, data: action.data}
+    return { ...state, isLoading: false, data: action.data, fields: action.fields}
 
   case types.LOAD_FAILURE:
     return { ...state, isLoading: false, error: action.error }
@@ -94,13 +94,15 @@ export const selectors = {
   getVisibleIds: state => state.visibleData.map(x => x.obj_id)
 }
 
+const convertFields = (fields) => {
+  return Object.keys(fields)
+}
 export const saga = ({fetchDocs}) => function* (dispatch, getState)  {
   yield takeEvery(types.LOAD_REQUEST, function* () {
     try {
       const state = yield getState()
-      console.log(1234,state.sources.list[state.sources.selected].urls.docs)
       const data = yield call(() => fetchDocs(state.sources.list[state.sources.selected].urls.docs))
-      yield put({type: types.LOAD_SUCCESS, data})
+      yield put({type: types.LOAD_SUCCESS, data, fields: convertFields(state.sources.list[state.sources.selected].fields)})
     } catch (error) {
       yield put({type: types.LOAD_FAILURE, error: JSON.stringify(error)})
     }

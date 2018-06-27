@@ -2,15 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types'
 import ReactTable from "react-table";
 import "react-table/react-table.css";
-import DocContainer from './DocContainer'
 import checkboxHOC from "react-table/lib/hoc/selectTable";
+import { connect } from 'react-redux';
+import { actions } from '../ducks/docs'
+
 const CheckboxTable = checkboxHOC(ReactTable);
 
-// const toHeader = x => ({ Header: x, accessor: x})
-
-const visible = (data, pageSize, page) => {
-  return data.slice(page*pageSize,(page+1)*pageSize)
-}
 const stringFilter = (filter, row) => {
   const value = String(row[filter.id])
   const expr = filter.value
@@ -126,72 +123,104 @@ const calcPageSizeOptions = (dataLength) => {
     .filter(x => x < dataLength)
   return [...result, dataLength].filter(x => x<= 100)
 }
-const DocTable = (props) => (
-  <CheckboxTable
-    keyField='obj_id'
-    style={{}}
-    defaultFilterMethod={stringFilter}
-    pageSizeOptions={calcPageSizeOptions(props.data.length)}
-    defaultPageSize={10}
-    className="-striped -highlight"
-    data = {props.data}
-    filterable = {true}
-    selectType = "checkbox"
-    isSelected = {key => isSelected(key, props)}
-    toggleAll = {() => {
-      if (
-        props.visibleData
-          .map(x => x.obj_id)
-          .map(obj_id => isSelected(obj_id,props))
-          .filter(isSel => isSel === false)
-          .length > 0
-      ) {
-        props.visibleData
-          .map(x => x.obj_id)
-          .map(obj_id => props.select(obj_id))
-      } else {
-        props.visibleData
-          .map(x => x.obj_id)
-          .map(obj_id => props.unselect(obj_id))
-      }
-    }}
-    toggleSelection = {key => toggleSelection(key, props)}
-    getTrProps = {
-      (state, rowInfo) => {
-        let selected = false
-        try {
-          selected = isSelected(rowInfo.original.obj_id, props);
-        } catch(error) {
-          selected = false
+const visible = (data, pageSize, page) => {
+  return data.slice(page*pageSize,(page+1)*pageSize)
+}
+
+class DocTable extends React.Component{
+  constructor(props) {
+    super(props)
+    this.updateVisibleData = this.updateVisibleData.bind(this)
+  }
+  updateVisibleData(state) {
+    if (!state) return;
+    const data = visible(state.sortedData, state.pageSize, state.page)
+    this.props.onVisible(data)
+  }
+  componentDidUpdate() {
+    if (this.node)
+      this.updateVisibleData(this.node.wrappedInstance.state)
+  }
+  render() {
+    return   (
+      <CheckboxTable
+        ref={node => {this.node = node}}
+        keyField='obj_id'
+        style={{}}
+        defaultFilterMethod={stringFilter}
+        pageSizeOptions={calcPageSizeOptions(this.props.data.length)}
+        defaultPageSize={10}
+        className="-striped -highlight"
+        data = {this.props.data}
+        filterable = {true}
+        selectType = "checkbox"
+        isSelected = {key => isSelected(key, this.props)}
+        toggleAll = {() => {
+          if (
+            this.props.visibleData
+              .map(x => x.obj_id)
+              .map(obj_id => isSelected(obj_id,this.props))
+              .filter(isSel => isSel === false)
+              .length > 0
+          ) {
+            this.props.visibleData
+              .map(x => x.obj_id)
+              .map(obj_id => this.props.select(obj_id))
+          } else {
+            this.props.visibleData
+              .map(x => x.obj_id)
+              .map(obj_id => this.props.unselect(obj_id))
+          }
+        }}
+        toggleSelection = {key => toggleSelection(key, this.props)}
+        getTrProps = {
+          (state, rowInfo) => {
+            let selected = false
+            try {
+              selected = isSelected(rowInfo.original.obj_id, this.props);
+            } catch(error) {
+              selected = false
+            }
+            return {
+              style: {
+                backgroundColor: selected ? "lightgreen" : "inherit"
+                // color: selected ? 'white' : 'inherit',
+              },
+              onClick: () => toggleSelection(rowInfo.original.obj_id, this.props)
+            };
+          }
         }
-        return {
-          style: {
-            backgroundColor: selected ? "lightgreen" : "inherit"
-            // color: selected ? 'white' : 'inherit',
-          },
-          onClick: () => toggleSelection(rowInfo.original.obj_id, props)
-        };
-      }
-    }
-    columns = {columns}
-    onFetchData = {state => {
-      if (!state) return;
-      const data = visible(state.sortedData, state.pageSize, state.page)
-      if (props.onVisible)
-        props.onVisible(data)
-    }}
-  />
-)
+        columns = {columns}
+        onFetchData = {this.updateVisibleData}
+      />
+    )
+  }
+}
 DocTable.propTypes = {
   data: PropTypes.array.isRequired,
-  visibleData: PropTypes.array.isRequired,
   fields: PropTypes.array.isRequired,
   selection: PropTypes.array.isRequired,
-  onVisible: PropTypes.func.isRequired,
   select: PropTypes.func.isRequired,
   unselect: PropTypes.func.isRequired,
-
+  onVisible: PropTypes.func.isRequired,
+}
+function mapStateToProps(state) {
+  return {
+    data:   state.docs.data,
+    fields: state.docs.fields,
+    selection: state.docs.selection,
+  }
+}
+function mapDispatchToProps(dispatch) {
+  return {
+    select: x => dispatch(actions.select(x)),
+    unselect: x => dispatch(actions.unselect(x)),
+    onVisible: data => dispatch(actions.setVisibleData(data)),
+  };
 }
 
 export default DocTable
-export const DocTableContainer = DocContainer(DocTable)
+export const DocTableContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(DocTable)

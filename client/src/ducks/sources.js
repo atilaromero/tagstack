@@ -42,6 +42,10 @@ export const actions = {
 export const selectors = {}
 
 export const saga = ({fetchSources}) => function* (dispatch, getState)  {
+  yield takeEvery(types.SELECT, function* () {
+    yield put({type: 'DOCS/CLEAR'})
+    yield put({type: 'DOCS/LOAD_REQUEST'})
+  })
   yield takeEvery(types.LOAD_REQUEST, function* () {
     try {
       const data = yield call(fetchSources)

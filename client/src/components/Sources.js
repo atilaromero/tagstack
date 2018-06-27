@@ -16,8 +16,6 @@ export class Sources extends React.Component {
   render(){
     return (
       <div>
-        <h4>Sources</h4>
-        {/* <hr/> */}
         <List
           listItems={this.props.list}
           disabled={this.props.isLoading}
@@ -28,12 +26,6 @@ export class Sources extends React.Component {
           <span style={{color: 'red'}}>Error: {this.props.error}</span>
           :''
         }
-        <hr/>
-        <button className='btn btn-outline-primary'
-          onClick={this.props.updateDocs}>
-          Update
-        </button>
-        <hr/>
       </div>
     );
   }

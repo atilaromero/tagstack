@@ -5,8 +5,6 @@ import NavTop from './components/auth/NavTop'
 import GoogleUser from './components/auth/GoogleUser'
 import TabStack from './components/TabStack'
 import { DocTableContainer } from './components/DocTable'
-import { SourcesContainer } from './components/Sources'
-import { SearchContainer } from './components/Search'
 
 import './App.css'
 
@@ -44,8 +42,6 @@ class App extends Component {
           client_id={REACT_APP_CLIENT_ID}
         />
         <NavTop signedIn={this.state.signedIn} user={this.state.user}/>
-        <SourcesContainer/>
-        <SearchContainer/>
         <div className="container">
           <div className="row">
             <div className="col-md-12">

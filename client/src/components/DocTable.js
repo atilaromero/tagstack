@@ -169,7 +169,7 @@ class DocTable extends React.Component{
 }
 DocTable.propTypes = {
   data: PropTypes.array.isRequired,
-  fields: PropTypes.array.isRequired,
+  fields: PropTypes.object.isRequired,
   visibleData: PropTypes.array.isRequired,
   selection: PropTypes.array.isRequired,
   select: PropTypes.func.isRequired,

@@ -36,25 +36,22 @@ const store = createStore(
   initialState,
   applyMiddleware(
     sagaMiddleware,
-    // logger,
+    logger,
   )
 )
 
-const URL = ''
 const ROUTES = {
-  sources: URL + '/sources',
-  search: URL + '/search',
-  docs: URL + '/docs',
+  sources: "https://raw.githubusercontent.com/atilaromero/tagstack/datasets/sources/vd.json",
 }
 
 sagaMiddleware.run(sourcesSaga({
   fetchSources: fetchSources({url: ROUTES.sources}),
 }), store.dispatch, store.getState)
 sagaMiddleware.run(searchSaga({
-  fetchSearch:  fetchSearch({url: ROUTES.search}),
+  fetchSearch:  fetchSearch(),
 }), store.dispatch, store.getState)
 sagaMiddleware.run(docsSaga({
-  fetchDocs:    fetchDocs({url: ROUTES.docs}),
+  fetchDocs:    fetchDocs(),
 }), store.dispatch, store.getState)
 
 

@@ -118,7 +118,7 @@ Tabs.propTypes = {
 
   data: PropTypes.array.isRequired,
   visibleData: PropTypes.array.isRequired,
-  fields: PropTypes.array.isRequired,
+  fields: PropTypes.object.isRequired,
   selection: PropTypes.array.isRequired,
 
   select: PropTypes.func.isRequired,

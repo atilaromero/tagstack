@@ -29,7 +29,7 @@ export const types = {
 
 export const initialState = {
   data: [],
-  fields: [],
+  fields: {},
   tags: {},
   visibleData: [],
   selection: [],
@@ -94,15 +94,12 @@ export const selectors = {
   getVisibleIds: state => state.visibleData.map(x => x.obj_id)
 }
 
-const convertFields = (fields) => {
-  return Object.keys(fields)
-}
 export const saga = ({fetchDocs}) => function* (dispatch, getState)  {
   yield takeEvery(types.LOAD_REQUEST, function* () {
     try {
       const state = yield getState()
       const data = yield call(() => fetchDocs(state.sources.list[state.sources.selected].urls.docs))
-      yield put({type: types.LOAD_SUCCESS, data, fields: convertFields(state.sources.list[state.sources.selected].fields)})
+      yield put({type: types.LOAD_SUCCESS, data, fields: state.sources.list[state.sources.selected].fields})
     } catch (error) {
       yield put({type: types.LOAD_FAILURE, error: JSON.stringify(error)})
     }

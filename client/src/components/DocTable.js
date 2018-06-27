@@ -60,53 +60,22 @@ const numberFilter = (filter, row) => {
   return (Number(value) === Number(expr))
 }
 
-const columns = [
-  { Header: 'obj_id', accessor: 'obj_id',
-    filterMethod: numberFilter },
-  // { Header: 'fs_obj_id', accessor: 'fs_obj_id' },
-  // { Header: 'data_source_obj_id', accessor: 'data_source_obj_id' },
-  // { Header: 'attr_type', accessor: 'attr_type' },
-  // { Header: 'attr_id', accessor: 'attr_id' },
-  { Header: 'parent_path', accessor: 'parent_path' },
-  { Header: 'name', accessor: 'name' },
-  // { Header: 'meta_addr', accessor: 'meta_addr' },
-  // { Header: 'meta_seq', accessor: 'meta_seq' },
-  // { Header: 'type', accessor: 'type' },
-  // { Header: 'has_layout', accessor: 'has_layout' },
-  // { Header: 'has_path', accessor: 'has_path' },
-  { Header: 'size', accessor: 'size',
-    filterMethod: numberFilter },
-  // { Header: 'ctime', accessor: 'ctime' },
-  { Header: 'crtime', accessor: 'crtime',
-    Cell: ({value}) => (new Date(value).toISOString()),
-    filterMethod: dateFilter
-  },
-  { Header: 'atime', accessor: 'atime',
-    Cell: ({value}) => (new Date(value).toISOString()),
-    filterMethod: dateFilter
-  },
-  { Header: 'mtime', accessor: 'mtime',
-    Cell: ({value}) => (new Date(value).toISOString()),
-    filterMethod: dateFilter
-  },
-  { Header: 'dir_type', accessor: 'dir_type',
-    filterMethod: numberFilter },
-  { Header: 'meta_type', accessor: 'meta_type',
-    filterMethod: numberFilter },
-  { Header: 'dir_flags', accessor: 'dir_flags',
-    filterMethod: numberFilter },
-  { Header: 'meta_flags', accessor: 'meta_flags',
-    filterMethod: numberFilter },
-  { Header: 'mode', accessor: 'mode',
-    filterMethod: numberFilter },
-  { Header: 'uid', accessor: 'uid',
-    filterMethod: numberFilter },
-  { Header: 'gid', accessor: 'gid',
-    filterMethod: numberFilter },
-  // { Header: 'md5', accessor: 'md5' },
-  // { Header: 'known', accessor: 'known' },
-  // { Header: 'mime_type', accessor: 'mime_type' } ,
-]
+const getColumns = (fields) => {
+  return Object.keys(fields).map(key => {
+    switch (fields[key].type) {
+    case "number":
+      return  { Header: key, accessor: key,
+        filterMethod: numberFilter }
+    case "date-time":
+      return  { Header: key, accessor: key,
+        Cell: ({value}) => (new Date(value).toISOString()),
+        filterMethod: dateFilter }
+    default:
+      return  { Header: key, accessor: key,
+        filterMethod: stringFilter }
+    }
+  })
+}
 
 const isSelected = (key, props) => {
   return props.selection.includes(key)
@@ -138,8 +107,10 @@ class DocTable extends React.Component{
     this.props.onVisible(data)
   }
   componentDidUpdate() {
-    if (this.node)
+    if (!this.node) return ;
+    if (this.props.visibleData.length===0 && this.props.data.length>0){
       this.updateVisibleData(this.node.wrappedInstance.state)
+    }
   }
   render() {
     return   (
@@ -190,7 +161,7 @@ class DocTable extends React.Component{
             };
           }
         }
-        columns = {columns}
+        columns = {getColumns(this.props.fields)}
         onFetchData = {this.updateVisibleData}
       />
     )
@@ -199,6 +170,7 @@ class DocTable extends React.Component{
 DocTable.propTypes = {
   data: PropTypes.array.isRequired,
   fields: PropTypes.array.isRequired,
+  visibleData: PropTypes.array.isRequired,
   selection: PropTypes.array.isRequired,
   select: PropTypes.func.isRequired,
   unselect: PropTypes.func.isRequired,
@@ -208,6 +180,7 @@ function mapStateToProps(state) {
   return {
     data:   state.docs.data,
     fields: state.docs.fields,
+    visibleData: state.docs.visibleData,
     selection: state.docs.selection,
   }
 }

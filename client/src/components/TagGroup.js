@@ -105,7 +105,7 @@ class TagGroup extends React.Component {
                     <div className="input-group-prepend">
                       <button className="btn btn-outline-success"
                         onClick={this.handleAdd}>
-                        Add select itens to
+                        Add selected items to
                       </button>
                     </div>
                     <input type="text" readOnly
@@ -115,7 +115,7 @@ class TagGroup extends React.Component {
                     <div className="input-group-append">
                       <button className="btn btn-outline-danger"
                         onClick={this.handleRemove}>
-                        Remove selected itens from
+                        Remove selected items from
                       </button>
                     </div>
                   </div>
@@ -125,7 +125,7 @@ class TagGroup extends React.Component {
                     <div className="input-group-prepend">
                       <button className="btn btn-outline-success"
                         onClick={this.handlePull}>
-                        Pull itens from
+                        Pull items from
                       </button>
                     </div>
                     <input type="text" readOnly
@@ -135,7 +135,7 @@ class TagGroup extends React.Component {
                     <div className="input-group-append">
                       <button className="btn btn-outline-danger"
                         onClick={this.handleIgnore}>
-                        Ignore itens from
+                        Ignore items from
                       </button>
                     </div>
                   </div>

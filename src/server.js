@@ -14,116 +14,12 @@ assert(REACT_APP_CLIENT_ID, 'REACT_APP_CLIENT_ID not set')
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, '/../client/build')));
 
-app.use('/tags',
-  auth_middleware,
-  (req, res) => {
-    res.json({
-      id: 1,
-      tag: 'asdf',
-      items: [
-        { id: 1 },
-        { id: 2 },
-      ]
-    })
-  }
-)
-
-async function doSources() {
-  const url = "http://0.0.0.0:8080/sources"
-  const res2 = await fetch(url)
-  return res2.json()
-}
 app.use('/sources',
   // auth_middleware,
   (req, res) => {
-    doSources()
-      .then(data => {
-        const result = {}
-        data.forEach(x => {
-          result[x] = {
-            id: x,
-            urls: {
-              docs: '',
-              search: '',
-            },
-            fields: [],
-          }
-        })
-        return result
-      })
-      .then(data => ({...data, teste: {
-        id: 'teste',
-        urls: {
-          docs: 'https://raw.githubusercontent.com/atilaromero/tagstack/development/client/src/data.json',
-          // search: '',
-        },
-        fields: {
-          obj_id: {type: 'number'},
-          parent_path: {type: 'string'},
-          name: {type: 'string'},
-          size: {type: 'number'},
-          crtime: {type: 'date-time'},
-          atime: {type: 'date-time'},
-          mtime: {type: 'date-time'},
-        }
-      }}))
-      .then(data => {
-        res.json(data)
-      })
-      .catch(error => {
-        res.status(500).json({error})
-      })
-  }
-)
-
-app.use('/docs',
-  // auth_middleware,
-  (req, res) => {
-    const url = "http://0.0.0.0:8080/docs"
-    const r = request.post({uri: url, json: req.body})
-    req.pipe(r).pipe(res)
-  }
-)
-
-app.use('/search',
-  // auth_middleware,
-  (req, res) => {
-    const url = "http://0.0.0.0:8080/search" + req.url
+    const url = "https://raw.githubusercontent.com/atilaromero/tagstack/datasets/sources/vd.json"
     const r = request(url)
     req.pipe(r).pipe(res)
-  }
-)
-
-// async function doSearch(query) {
-//   const url = "http://0.0.0.0:8080/search/item02-M170206?q=" + encodeURIComponent(query)
-//   const res2 = await fetch(url)
-//   const data = res2.text()
-//   return data
-// }
-// app.use('/search',
-//   // auth_middleware,
-//   (req, res) => {
-//     doSearch(req.query.q)
-//       .then(data => {
-//         setTimeout(function () {
-//           res.json({data})
-//         }, 1000);
-//       })
-//       .catch(error => {
-//         res.status(500).json({error})
-//       })
-//   }
-// )
-
-app.use('/data',
-  auth_middleware,
-  (req, res) => {
-    res.json({
-      columns: [
-        ['data1', 30, 200, 100, 400, 150, 250],
-        ['data2', 50, 20, 10, 40, 15, 25],
-      ]
-    })
   }
 )
 

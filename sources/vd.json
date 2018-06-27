@@ -32,7 +32,7 @@
   "RM2": {
     "id": "RM2",
     "urls": {
-      "docs": "https://raw.githubusercontent.com/atilaromero/tagstack/datasets/data_leakage/RM1/data.json"
+      "docs": "https://raw.githubusercontent.com/atilaromero/tagstack/datasets/data_leakage/RM2/data.json"
     },
     "fields": {
       "obj_id": {

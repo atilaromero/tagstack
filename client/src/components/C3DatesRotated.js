@@ -3,10 +3,10 @@ import PropTypes from 'prop-types'
 import c3 from 'c3'
 const uuidv4 = require('uuid/v4')
 
-class C3Dates extends Component {
+class C3DatesRotated extends Component {
   constructor(props){
     super(props)
-    this.createC3Dates = this.createC3Dates.bind(this)
+    this.createC3DatesRotated = this.createC3DatesRotated.bind(this)
     this.indexToID = this.indexToID.bind(this)
     this.idToIndex = this.idToIndex.bind(this)
   }
@@ -20,7 +20,7 @@ class C3Dates extends Component {
     this.id = 'id-'+uuidv4().slice(0,8);
   }
   componentDidMount() {
-    this.createC3Dates(this.props, this.id)
+    this.createC3DatesRotated(this.props, this.id)
     this.componentDidUpdate()
   }
   componentDidUpdate() {
@@ -48,7 +48,7 @@ class C3Dates extends Component {
       })
     }
   }
-  createC3Dates(props, id) {
+  createC3DatesRotated(props, id) {
     this.options = {
       bindto: '#'+id,
       grid: {
@@ -60,10 +60,18 @@ class C3Dates extends Component {
         },
       },
       axis: {
+        rotated: true,
         x: {
           tick: {
-            format: (x) => this.indexToID(x),
-            // rotate: 60,
+            format: (y) => {
+              let x=y
+              try {
+                x = this.indexToID(y)
+              } catch (error) {
+                //
+              }
+              return x
+            },
             culling:false,
             fit: true,
           }
@@ -71,6 +79,7 @@ class C3Dates extends Component {
         y: {
           type: 'timeseries',
           tick: {
+            rotate: 30,
             format: y => {
               const x = (y<10000000000)?y*1000:y
               return x?new Date(x).toISOString().slice(0):x
@@ -114,10 +123,10 @@ class C3Dates extends Component {
     )
   }
 }
-C3Dates.propTypes = {
+C3DatesRotated.propTypes = {
   json: PropTypes.array.isRequired,
   selection: PropTypes.array.isRequired,
   onselected: PropTypes.func.isRequired,
   onunselected: PropTypes.func.isRequired,
 }
-export default C3Dates
+export default C3DatesRotated

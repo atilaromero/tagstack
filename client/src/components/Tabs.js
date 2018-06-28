@@ -16,6 +16,7 @@ import DocTable from './DocTable'
 
 import C3Size from './C3Size'
 import C3Dates from './C3Dates'
+import C3DatesRotated from './C3DatesRotated'
 import { TagGroupContainer } from './TagGroup'
 
 export class Tabs extends React.Component {
@@ -23,6 +24,7 @@ export class Tabs extends React.Component {
     super(props);
 
     this.toggle = this.toggle.bind(this);
+    this.toggleRotate = this.toggleRotate.bind(this);
     this.state = {
       activeTab: props.initialTab.toString(),
     };
@@ -38,6 +40,9 @@ export class Tabs extends React.Component {
         activeTab: tab
       });
     }
+  }
+  toggleRotate(){
+    this.setState({rotate: !this.state.rotate})
   }
   render() {
     return (
@@ -97,11 +102,33 @@ export class Tabs extends React.Component {
             />
           </TabPane>
           <TabPane tabId="4">
-            <C3Dates json={this.props.visibleData}
-              selection={this.props.selection}
-              onselected={this.props.select}
-              onunselected={this.props.unselect}
-            />
+            <div className="container">
+              <div className="row">
+                <div className="ml-auto">
+                  Switch X:Y
+                  <label className="switch">
+                    <input type="checkbox"
+                      onChange={this.toggleRotate}
+                      value={(!!this.state.rotate)}
+                    />
+                    <span className="slider round"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+            {(!this.state.rotate)?
+              <C3Dates json={this.props.visibleData}
+                selection={this.props.selection}
+                onselected={this.props.select}
+                onunselected={this.props.unselect}
+              />
+              :
+              <C3DatesRotated json={this.props.visibleData}
+                selection={this.props.selection}
+                onselected={this.props.select}
+                onunselected={this.props.unselect}
+              />
+            }
           </TabPane>
         </TabContent>
       </div>

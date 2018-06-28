@@ -50,6 +50,36 @@ class C3Size extends Component {
   createC3Size(props, id) {
     this.options = {
       bindto: '#'+id,
+      grid: {
+        x: {
+          show: true
+        },
+        y: {
+          show: true
+        },
+      },
+      axis: {
+        x: {
+          tick: {
+            format: (x) => this.indexToID(x),
+            // rotate: 60,
+            culling:false,
+            fit: true,
+          }
+        },
+        y: {
+          tick: {
+            format: y => {
+              let x = y
+              x = (y>1024)?`${(y/1024).toFixed(1)}KiB`:x
+              x = (y>1024**2)?`${(y/1024**2).toFixed(1)}MiB`:x
+              x = (y>1024**3)?`${(y/1024**3).toFixed(1)}GiB`:x
+              x = (y>1024**4)?`${(y/1024**4).toFixed(1)}TiB`:x
+              return x
+            }
+          }
+        }
+      },
       data: {
         json: props.json,
         keys: {
@@ -69,6 +99,10 @@ class C3Size extends Component {
           if (!this.disabled)
             this.props.onunselected(this.indexToID(sel.index))
         },
+      },
+      zoom: {
+        enabled: true,
+        rescale: true,
       },
       subchart: {
         show: true

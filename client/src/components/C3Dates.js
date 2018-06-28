@@ -50,10 +50,36 @@ class C3Dates extends Component {
   createC3Dates(props, id) {
     this.options = {
       bindto: '#'+id,
-      axis: {
+      grid: {
+        x: {
+          show: true
+        },
         y: {
-          type: 'timeseries'
+          show: true
+        },
+      },
+      axis: {
+        x: {
+          tick: {
+            format: (x) => this.indexToID(x),
+            // rotate: 60,
+            culling:false,
+            fit: true,
+          }
+        },
+        y: {
+          type: 'timeseries',
+          tick: {
+            format: y => {
+              const x = (y<10000000000)?y*1000:y
+              return x?new Date(x).toISOString().slice(0):x
+            }
+          }
         }
+      },
+      zoom: {
+        enabled: true,
+        rescale: true,
       },
       subchart: {
         show: true

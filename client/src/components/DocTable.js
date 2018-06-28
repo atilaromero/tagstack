@@ -14,7 +14,8 @@ const stringFilter = (filter, row) => {
   return value.includes(expr)
 }
 const dateFilter = (filter, row) => {
-  const value = new Date(row[filter.id])
+  let value = new Date(row[filter.id])
+  value = (value<10000000000)?value*1000:value
   const expr = filter.value
   if (expr.startsWith('>=')) try {
     return (new Date(value) >= new Date(expr.slice(2)))
@@ -68,7 +69,10 @@ const getColumns = (fields) => {
         filterMethod: numberFilter }
     case "date-time":
       return  { Header: key, accessor: key,
-        Cell: ({value}) => (new Date(value).toISOString()),
+        Cell: ({value}) => {
+          const x = (value<10000000000)?value*1000:value
+          return new Date(x).toISOString()
+        },
         filterMethod: dateFilter }
     default:
       return  { Header: key, accessor: key,
@@ -102,14 +106,20 @@ class DocTable extends React.Component{
     this.updateVisibleData = this.updateVisibleData.bind(this)
   }
   updateVisibleData(state) {
-    if (!state) return;
+    if (!state || this.disabled) return;
     const data = visible(state.sortedData, state.pageSize, state.page)
     this.props.onVisible(data)
+  }
+  shouldComponentUpdate(){
+    return (!this.disabled)
   }
   componentDidUpdate() {
     if (!this.node) return ;
     if (this.props.visibleData.length===0 && this.props.data.length>0){
-      this.updateVisibleData(this.node.wrappedInstance.state)
+      const state = this.node.wrappedInstance.state
+      if (visible(state.sortedData, state.pageSize, state.page).length>0){
+        this.updateVisibleData(state)
+      }
     }
   }
   render() {

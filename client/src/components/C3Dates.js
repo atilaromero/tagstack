@@ -87,9 +87,8 @@ class C3Dates extends Component {
       data: {
         json: props.json,
         keys: {
-          value: ['obj_id', 'atime', 'mtime', 'crtime']
+          value: ['atime', 'mtime', 'crtime']
         },
-        hide: ['obj_id'],
         type: 'scatter',
         selection: {
           enabled: true,
